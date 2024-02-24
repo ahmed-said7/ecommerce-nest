@@ -8,6 +8,8 @@ import { name as prodName,ProductDoc} from "./product.entity";
 import { name as catName , CategoryDoc } from "src/category/category.entity";
 import { SubcategoryDoc , name as subName } from "src/subcategory/subcategory.entity";
 import { BrandDoc,name as brandName } from "src/brand/brand.entity";
+import { ReviewServices } from "src/reviews/reviews.service";
+import { UserDoc } from "src/user/user.entity";
 
 export interface CreateProduct {
     title: string;
@@ -45,6 +47,7 @@ export interface UpdateProduct {
 @Injectable()
 export class ProductServices {
     constructor(
+        private reviewService: ReviewServices,
         @InjectModel(prodName) private prod:Model<ProductDoc>,
         @InjectModel(subName) private sub:Model<SubcategoryDoc>,
         @InjectModel(catName) private cat:Model<CategoryDoc>,
@@ -108,5 +111,14 @@ export class ProductServices {
         if( subs.length !== ids.length ){
             throw new HttpException('subcategories not found',400);
         }
+    };
+
+    createReview(user:UserDoc,id:ObjectId,rating:number,review?:string){
+        return this.reviewService.createReview({product:id,rating,review},user);
+    };
+
+    getProductReviews(id:ObjectId,query:queryInterface){
+        query.product=id;
+        return this.reviewService.getAllReviews(query);
     };
 };

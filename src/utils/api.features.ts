@@ -22,8 +22,8 @@ export interface Pagination {
 export class apiFeatures< T > {
     public paginationObj:Pagination={};
     constructor( public query:Query< T[] , T > , public queryObj:queryInterface ){};
-    filter(){
-        let filter={ ... this.queryObj };
+    filter(obj?:object){
+        let filter={ ... this.queryObj , ...  obj };
         let fields : ('keyword'|'page'|'limit'|'select'|'sort')[]=['keyword','page','limit','select','sort'];
         fields.forEach( (field  ) => { delete filter[field] } );
         let queryStr=JSON.stringify(filter);

@@ -4,6 +4,8 @@ import { CategoryDoc, name } from "./category.entity";
 import mongoose, { Model, ObjectId } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
 import { queryInterface } from "src/utils/api.features";
+import { CreateSubcategory, SubcategoryServices } from "src/subcategory/subcategory.service";
+import { SubcategoryDoc, name as subName } from "src/subcategory/subcategory.entity";
 
 interface CreateCategory {
     name: string;
@@ -19,7 +21,8 @@ interface UpdateCategory {
 export class CategoryServices {
     constructor(
         @InjectModel(name) private model:Model<CategoryDoc>,
-        private api:apiFactory<CategoryDoc>
+        private api:apiFactory<CategoryDoc>,
+        private subcategoryService:SubcategoryServices
     ){};
     getAllCats(query:queryInterface){
         return this.api.getAll(this.model,query);
@@ -46,5 +49,12 @@ export class CategoryServices {
             throw new HttpException('Cannot update category',400);
         };
         return {data:cat};
+    };
+    getAllSubcategories(id:ObjectId,query:queryInterface){
+        query.user=id;
+        return this.subcategoryService.getAllSubs(query);
+    };
+    createSubcategory(body:CreateSubcategory){
+        return this.subcategoryService.createSub(body);
     };
 };

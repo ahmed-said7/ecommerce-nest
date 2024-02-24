@@ -6,9 +6,11 @@ import { FileFieldsInterceptor} from "@nestjs/platform-express";
 import { CreateProduct, ProductServices, UpdateProduct } from "./product.service";
 import { fileValidationPipe } from "./pipes/file.pipe";
 import { bodyCreateProductValidationPipe, bodyUpdateProductValidationPipe} from "./pipes/body.pipe";
-import { ProtectInterceptor } from "src/interceptors/protect.interceptor";
+
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
+import { User } from "src/decorator/user.decorator";
+import { UserDoc } from "src/user/user.entity";
 
 
 
@@ -58,6 +60,25 @@ export class ProductController {
         @Body(bodyCreateProductValidationPipe) body:CreateProduct,
         @UploadedFiles(fileValidationPipe) uploaded : { images?:string[]; imageCover?:string; } ){
         return this.productService.createProd({ ... body , ... uploaded });
+    };
+
+    @Delete(":id/review")
+    @Roles(['admin','manager'])
+    @UseGuards(AuthorizationGuard)
+    createReview(
+        @Param('id') id:ObjectId,
+        @User() user:UserDoc,
+        @Body('rating') rating:number,
+        @Body('review') review?: string
+        ){
+        return this.productService.createReview(user,id,rating,review);
+    };
+
+    @Get(":id/review")
+    @Roles(['admin','manager'])
+    @UseGuards(AuthorizationGuard)
+    getReviews(@Param('id') id:ObjectId,@Query() query:queryInterface){
+        return this.productService.getProductReviews(id,query);
     };
 
 };

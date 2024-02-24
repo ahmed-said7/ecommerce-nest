@@ -7,7 +7,7 @@ import { name as catName , CategoryDoc } from "src/category/category.entity";
 import { name as subName , SubcategoryDoc } from "./subcategory.entity";
 
 
-interface CreateSubcategory {
+export interface CreateSubcategory {
     name: string;
     image?: string;
     category:ObjectId;

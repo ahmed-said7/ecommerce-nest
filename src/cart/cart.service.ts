@@ -77,12 +77,19 @@ export class CartServices {
         await cart.deleteOne();
         return { cart: cart , status:"deleted" };
     };
+    async getLoggedUserCart(user:UserDoc){
+        let cart=await this.cart.findOne({user:user._id});
+        if(!cart){
+            throw new HttpException('cart not found',400);
+        };
+        return { cart: cart};
+    };
     async deleteCart(id:ObjectId){
         return this.api.deleteOne(this.cart,id);
     };
-    async deleteItemFromCart(user:UserDoc,product:mongoose.Types.ObjectId){
+    async deleteItemFromCart(user:UserDoc,_id:mongoose.Types.ObjectId){
         let cart=await this.cart.findOneAndUpdate
-            ( {user:user._id} , { $pull : { cartItems : { product } }  } , { new:true } );
+            ( {user:user._id} , { $pull : { cartItems : { _id } }  } , { new:true } );
         if(!cart){
             throw new HttpException('cart not found',400);
         };

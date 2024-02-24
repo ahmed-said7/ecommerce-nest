@@ -4,14 +4,15 @@ import { categorySchema, name } from "./category.entity";
 import { CategoryServices } from "./category.services";
 import { CategoryController } from "./category.controller";
 import { apiModule } from "src/utils/api";
-import { userSchema,name as userName } from "src/user/user.entity";
+import { name as userName } from "src/user/user.entity";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
+import { SubcategoryModule } from "src/subcategory/subcategory.module";
 
 
 @Module({
     imports:
-    [SchemaDefinitionModule,MongooseModule.forFeatureAsync([
+    [SubcategoryModule,SchemaDefinitionModule,MongooseModule.forFeatureAsync([
         {
             name:name
             ,useFactory:function(schema:SchemaDefinition){

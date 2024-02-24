@@ -25,17 +25,11 @@ export class SchemaDefinition {
         categorySchema.post<CategoryDoc>('init',function(){
             self.SetImage(this,'category');
         });
-        categorySchema.post<CategoryDoc>('save',function(){
-            self.SetImage(this,'category');
-        });
         return categorySchema;
     };
     brand(){
         const self=this;
         brandSchema.post<BrandDoc>('init',function(){
-            self.SetImage(this,'brand');
-        });
-        brandSchema.post<BrandDoc>('save',function(){
             self.SetImage(this,'brand');
         });
         return brandSchema;
@@ -46,9 +40,6 @@ export class SchemaDefinition {
             this.populate({ path:"category",select:"name image -_id"  });
         });
         subcategorySchema.post<SubcategoryDoc>('init',function(){
-            self.SetImage(this,'subcategory');
-        });
-        subcategorySchema.post<SubcategoryDoc>('save',function(){
             self.SetImage(this,'subcategory');
         });
         return subcategorySchema;
@@ -75,9 +66,6 @@ export class SchemaDefinition {
         productSchema.post<ProductDoc>('init',function(){
             SetImage(this);
         });
-        productSchema.post<ProductDoc>('save',function(){
-            SetImage(this);
-        });
         return productSchema;
     };
     user(){
@@ -89,9 +77,6 @@ export class SchemaDefinition {
             return next()
         });
         userSchema.post<UserDoc>('init',function(){
-            self.SetImage(this,'user');
-        });
-        userSchema.post<UserDoc>('save',function(){
             self.SetImage(this,'user');
         });
         return userSchema;

@@ -42,10 +42,10 @@ export class apiFactory <T extends mongoose.Document> {
         return {data};
     };
 
-    async getAll(model:Model<T>,queryObj:queryInterface){
+    async getAll(model:Model<T>,queryObj:queryInterface,obj?:object){
         const {paginationObj,query}
         =await new apiFeatures<T>( model.find() , queryObj )
-            .filter()
+            .filter( obj || {} )
             .sort()
             .select()
             .pagination();

@@ -11,10 +11,12 @@ import { ProductController } from "./product.controller";
 import { name as userName ,userSchema } from "src/user/user.entity";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
+import { ReviewModule } from "src/reviews/reviews.module";
 
 
 @Module({
     imports:[
+        ReviewModule,
         SchemaDefinitionModule,
         MongooseModule.forFeatureAsync([
                 {name:catName,

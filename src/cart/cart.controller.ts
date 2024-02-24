@@ -28,7 +28,7 @@ export class CartController {
     };
     
     @Delete(':id')
-    @Roles(['admin', 'manager'])
+    @Roles(['admin', 'manager','user'])
     @UseGuards(AuthorizationGuard)
     deleteCart(
         @Param('id') id:ObjectId,
@@ -37,23 +37,30 @@ export class CartController {
     };
     
     @Patch("update-product")
-    @Roles(['admin', 'manager'])
+    @Roles(['admin', 'manager','user'])
     @UseGuards(AuthorizationGuard)
-    deleteProductQuantity(@User() user:UserDoc,@Body() body:UpdateProductQuantityDto ){
+    updateProductQuantity(@User() user:UserDoc,@Body() body:UpdateProductQuantityDto ){
         return this.cartService.updateProductQuantity(user,body);
     };
 
     @Patch(":id")
-    @Roles(['admin', 'manager'])
+    @Roles(['admin', 'manager','user'])
     @UseGuards(AuthorizationGuard)
     deleteCartItem(@User() user:UserDoc,@Param('id') id:mongoose.Types.ObjectId){
         return this.cartService.deleteItemFromCart(user,id);
     };
 
     @Post(":name")
-    @Roles(['admin', 'manager'])
+    @Roles(['admin', 'manager','user'])
     @UseGuards(AuthorizationGuard)
     applyCoupon(@User() user:UserDoc,@Param('name') name:string){
         return this.cartService.applyCoupon(user,name);
+    };
+
+    @Get("")
+    @Roles(['admin', 'manager','user'])
+    @UseGuards(AuthorizationGuard)
+    getCart(@User() user:UserDoc){
+        return this.cartService.getLoggedUserCart(user);
     };
 };

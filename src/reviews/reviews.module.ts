@@ -13,9 +13,10 @@ import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/
 
 
 @Module({
-    providers:[ReviewServices,apiFactory],
+    exports:[ReviewServices],
+    providers:[apiFactory],
     controllers:[ReviewController],
-    imports:[SchemaDefinitionModule,
+    imports:[SchemaDefinitionModule,ReviewModule,
         EventEmitterModule.forRoot(),
         MongooseModule.forFeatureAsync([
             {name:productName,
