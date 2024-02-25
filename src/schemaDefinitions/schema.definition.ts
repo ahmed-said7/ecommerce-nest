@@ -101,7 +101,7 @@ export class SchemaDefinition {
     order(){
         orderSchema.pre< Query < OrderDoc[] | OrderDoc , OrderDoc > >(/^find/,function(){
             this.populate({path:"cartItems.product",select:"title imageCover"})
-            .populate({path:"user",select:"name email image"});
+            .populate({path:"user",select:"name image address"});
         });
         return orderSchema;
     };
