@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
-import { queryInterface } from "src/user/user.service";
+import { queryInterface } from "src/user/admin-features/user.service";
 import { ObjectId } from "mongoose";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Roles } from "src/decorator/roles.decorator";

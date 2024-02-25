@@ -1,14 +1,14 @@
 import { Body, Controller,Delete,Get,Patch, UploadedFile, UseGuards, UseInterceptors} from "@nestjs/common";
-import { UpdateUserDto } from "./dto/update.user.dto";
+import { UpdateUserDto } from "../dto/update.user.dto";
 import { LoggedUserServices } from "./logged.services";
 import { User } from "src/decorator/user.decorator";
-import { UserDoc } from "./user.entity";
-import { changeLoggedUserPasswordDto } from "./dto/password.dto";
-import { UserSerializerInterceptor } from "./interceptor/user.serialize.interceptor";
+import { UserDoc } from "../user.entity";
+import { changeLoggedUserPasswordDto } from "../dto/password.dto";
+import { UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { fileValidationPipe } from "./validator/upload.pipe";
+import { fileValidationPipe } from "../validator/upload.pipe";
 
 @Controller('logged')
 @UseInterceptors(UserSerializerInterceptor)

@@ -1,6 +1,6 @@
 import { Injectable, HttpException, Param} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserDoc, name } from "./user.entity";
+import { UserDoc, name } from "../user.entity";
 import { Model, ObjectId, model } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
 import { Models } from "src/enums/models.enum";

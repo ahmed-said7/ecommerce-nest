@@ -16,7 +16,8 @@ import { SubcategoryModule } from './subcategory/subcategory.module';
     ConfigModule.forRoot({isGlobal:true,envFilePath:"src/.env"}),
     MongooseModule.forRootAsync({
       imports:[ConfigModule],
-      inject:[ConfigService], useFactory:function(config:ConfigService){
+      inject:[ConfigService],
+      useFactory:function(config:ConfigService){
         return { uri : config.get<string>('url') };
     }}),
     SubcategoryModule,

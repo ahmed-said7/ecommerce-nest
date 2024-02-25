@@ -1,9 +1,9 @@
 import { Injectable, HttpException, UseInterceptors} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserDoc} from "./user.entity";
+import { UserDoc} from "../user.entity";
 import { Model} from "mongoose";
 import * as bcrypt from "bcryptjs";
-import { UserSerializerInterceptor } from "./interceptor/user.serialize.interceptor";
+import { UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 import { Models } from "src/enums/models.enum";
 
 

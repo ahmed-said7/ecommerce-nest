@@ -1,6 +1,6 @@
 import { Injectable, HttpException, Param} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserDoc, name } from "./user.entity";
+import { UserDoc, name } from "../user.entity";
 import { Model, ObjectId } from "mongoose";
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcryptjs";

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post,
         Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 
 import { CategoryServices } from "./category.services";
-import { queryInterface } from "src/user/user.service";
+import { queryInterface } from "src/user/admin-features/user.service";
 import { ObjectId } from "mongoose";
 import { UpdateCategoryDto } from "./dto/update.dto";
 import { CreateCategoryDto } from "./dto/create.dto";

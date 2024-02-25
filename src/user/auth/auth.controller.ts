@@ -1,10 +1,10 @@
 import { Body, Controller,Param, Post, UploadedFile, UploadedFiles, UseInterceptors} from "@nestjs/common";
 import { AuthServices } from "./auth.service";
-import { CreateUserDto } from "./dto/create.user.dto";
-import { LoginUserDto } from "./dto/login.user.dto";
-import { changePasswordDto } from "./dto/password.dto";
+import { CreateUserDto } from "../dto/create.user.dto";
+import { LoginUserDto } from "../dto/login.user.dto";
+import { changePasswordDto } from "../dto/password.dto";
 import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
-import { fileValidationPipe } from "./validator/upload.pipe";
+import { fileValidationPipe } from "../validator/upload.pipe";
 
 
 @Controller('auth')

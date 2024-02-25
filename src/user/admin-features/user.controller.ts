@@ -1,17 +1,16 @@
 import { Body, Controller,Delete,Get,Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors} from "@nestjs/common";
-import { AuthServices } from "./auth.service";
-import { CreateUserDto } from "./dto/create.user.dto";
-import { LoginUserDto } from "./dto/login.user.dto";
+import { AuthServices } from "../auth/auth.service";
+import { CreateUserDto } from "../dto/create.user.dto";
+import { LoginUserDto } from "../dto/login.user.dto";
 
-import { changePasswordDto } from "./dto/password.dto";
+import { changePasswordDto } from "../dto/password.dto";
 import { UserServices, queryInterface } from "./user.service";
 import { ObjectId } from "mongoose";
-import { UpdateUserDto } from "./dto/update.user.dto";
-import { GeTAllUserSerializerInterceptor, UserSerializerInterceptor } from "./interceptor/user.serialize.interceptor";
-import { ProtectInterceptor } from "src/interceptors/protect.interceptor";
+import { UpdateUserDto } from "../dto/update.user.dto";
+import { GeTAllUserSerializerInterceptor, UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { Roles } from "src/decorator/roles.decorator";
-import { fileValidationPipe } from "./validator/upload.pipe";
+import { fileValidationPipe } from "../validator/upload.pipe";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 

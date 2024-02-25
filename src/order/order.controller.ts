@@ -10,7 +10,7 @@ import { ObjectId } from "mongoose";
 import { queryInterface } from "src/utils/api.features";
 
 
-@Controller()
+@Controller('order')
 export class OrderController {
     constructor(private orderService: OrderServices){};
     

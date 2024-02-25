@@ -11,9 +11,19 @@ export const userSchema = new mongoose.Schema({
     passwordResetCodeExpires:Date,
     passwordResetCodeVertified:Boolean,
     active:{type:Boolean,default:true},
-    image:String
+    address:[{
+        street:String,
+        postalCode:String,
+        phone:String,
+        city:String,
+        details:String
+    }],
+    image:String,
+    wishlist:[{type:mongoose.Types.ObjectId,ref:"Product"}]
     
     },{ timestamps:true }); 
+
+
 
 export interface UserDoc extends mongoose.Document {
     name:string;
@@ -26,6 +36,14 @@ export interface UserDoc extends mongoose.Document {
     passwordResetCodeVertified?:boolean;
     active:boolean;
     image:string;
+    address:{
+        street:string,
+        postalCode:string,
+        phone:string,
+        city:string,
+        details:string
+    }[],
+    wishlist: mongoose.ObjectId[]
 };
 
 export const name='User';
