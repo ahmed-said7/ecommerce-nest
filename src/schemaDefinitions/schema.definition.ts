@@ -17,7 +17,7 @@ export class SchemaDefinition {
     constructor(private events:EventEmitter2,private config:ConfigService){};
     private SetImage(doc:{image:string},file:string){
         if(doc.image){
-            doc.image=`${this.config.get<string>('root_url')}/${file}/${doc.image}`;
+            doc.image=`http://${this.config.get<string>('root_url')}/${file}/${doc.image}`;
         };
     };
     category(){

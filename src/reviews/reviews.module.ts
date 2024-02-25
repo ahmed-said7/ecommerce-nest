@@ -14,9 +14,9 @@ import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/
 
 @Module({
     exports:[ReviewServices],
-    providers:[apiFactory],
+    providers:[apiFactory,ReviewServices],
     controllers:[ReviewController],
-    imports:[SchemaDefinitionModule,ReviewModule,
+    imports:[SchemaDefinitionModule,
         EventEmitterModule.forRoot(),
         MongooseModule.forFeatureAsync([
             {name:productName,

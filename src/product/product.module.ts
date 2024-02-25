@@ -12,6 +12,7 @@ import { name as userName ,userSchema } from "src/user/user.entity";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
 import { ReviewModule } from "src/reviews/reviews.module";
+import { ReviewServices } from "src/reviews/reviews.service";
 
 
 @Module({

@@ -11,6 +11,7 @@ import { SchemaDefinition} from "src/schemaDefinitions/schema.definition";
 
 
 @Module({
+    exports:[SubcategoryServices],
     imports:
     [apiModule, MongooseModule.forFeatureAsync( [ 
                 {name:userName,useFactory:function(schema:SchemaDefinition) {

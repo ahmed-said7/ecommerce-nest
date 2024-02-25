@@ -51,7 +51,7 @@ export class CategoryServices {
         return {data:cat};
     };
     getAllSubcategories(id:ObjectId,query:queryInterface){
-        query.user=id;
+        query.category=id;
         return this.subcategoryService.getAllSubs(query);
     };
     createSubcategory(body:CreateSubcategory){
