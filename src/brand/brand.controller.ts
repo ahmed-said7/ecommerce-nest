@@ -6,7 +6,6 @@ import { UpdateBrandDto } from "./dto/upate.dto";
 import { BrandServices } from "./brand.services";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { fileValidationPipe } from "./pipes/file.pipe";
-import { ProtectInterceptor } from "src/interceptors/protect.interceptor";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 

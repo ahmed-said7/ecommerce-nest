@@ -1,15 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ReviewServices } from "./reviews.service";
 import { ReviewController } from "./reviews.controller";
-import { InjectModel, MongooseModule } from "@nestjs/mongoose";
-import { productSchema,name as productName } from "src/product/product.entity";
-import { reviewSchema,name as reviewName} from "./reviews.entity";
-import { userSchema,name as userName,UserDoc } from "src/user/user.entity";
-import { Model } from "mongoose";
+import { MongooseModule } from "@nestjs/mongoose";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { apiFactory } from "src/utils/api.factory";
-import { EventEmitter2, EventEmitterModule } from "@nestjs/event-emitter";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/schema.definition";
+import { Models } from "src/enums/models.enum";
 
 
 @Module({
@@ -19,15 +16,18 @@ import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/
     imports:[SchemaDefinitionModule,
         EventEmitterModule.forRoot(),
         MongooseModule.forFeatureAsync([
-            {name:productName,
-                useFactory:function(schema:SchemaDefinition)
-                {return schema.product()},inject:[SchemaDefinition]},
-            {name:userName,
+            {
+                name:Models.PRODUCT,
+                useFactory:
+                function(schema:SchemaDefinition){return schema.product()}
+                ,inject:[SchemaDefinition]},
+            {
+                    name:Models.USER,
                     useFactory:function(schema:SchemaDefinition){return schema.user() }
                     ,inject:[SchemaDefinition]
             },
             {
-                name:reviewName,
+                name:Models.REVIEW,
                 useFactory:function( schema:SchemaDefinition ){
                     return schema.reviews();
                 },

@@ -5,7 +5,6 @@ import { User } from "src/decorator/user.decorator";
 import { UserDoc } from "./user.entity";
 import { changeLoggedUserPasswordDto } from "./dto/password.dto";
 import { UserSerializerInterceptor } from "./interceptor/user.serialize.interceptor";
-import { ProtectInterceptor } from "src/interceptors/protect.interceptor";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { FileInterceptor } from "@nestjs/platform-express";

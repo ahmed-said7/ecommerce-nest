@@ -4,6 +4,7 @@ import { Model, ObjectId } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
 import { queryInterface } from "src/utils/api.features";
 import { name,BrandDoc } from "./brand.entity";
+import { Models } from "src/enums/models.enum";
 
 interface CreateBrand {
     name: string;
@@ -17,7 +18,7 @@ interface UpdateBrand {
 @Injectable()
 export class BrandServices {
     constructor(
-        @InjectModel(name) private model:Model<BrandDoc>,
+        @InjectModel(Models.BRAND) private model:Model<BrandDoc>,
         private api:apiFactory<BrandDoc>
     ){};
     getAllBrands(query:queryInterface){

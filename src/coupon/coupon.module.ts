@@ -1,27 +1,24 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { apiModule } from "src/utils/api";
-
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
-import { name } from "./coupon.entity";
-import { name as userName} from "src/user/user.entity";
 import { CouponController } from "./coupon.controller";
 import { CouponServices } from "./coupon.service";
-import { CategoryController } from "src/category/category.controller";
+import { Models } from "src/enums/models.enum";
 
 
 @Module({
     imports:
     [SchemaDefinitionModule,MongooseModule.forFeatureAsync([
         {
-            name:name
+            name:Models.COUPON
             ,useFactory:function(schema:SchemaDefinition){
                 schema.coupon();
             },inject:[SchemaDefinition]
         },
         {
-            name:userName,
+            name:Models.USER,
             useFactory:function(schema:SchemaDefinition){
                 return schema.user();
             },inject:[SchemaDefinition]

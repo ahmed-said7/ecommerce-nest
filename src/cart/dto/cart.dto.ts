@@ -18,7 +18,7 @@ export class addProductToCartDto {
 export class UpdateProductQuantityDto {
     @IsNotEmpty()
     @IsMongoId()
-    product:mongoose.Types.ObjectId;
+    itemId:mongoose.Types.ObjectId;
     @IsNotEmpty()
     @IsNumber()
     quantity:number;

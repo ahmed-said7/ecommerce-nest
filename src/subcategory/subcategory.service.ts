@@ -3,8 +3,9 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
 import { queryInterface } from "src/utils/api.features";
-import { name as catName , CategoryDoc } from "src/category/category.entity";
-import { name as subName , SubcategoryDoc } from "./subcategory.entity";
+import {  CategoryDoc } from "src/category/category.entity";
+import { SubcategoryDoc } from "./subcategory.entity";
+import { Models } from "src/enums/models.enum";
 
 
 export interface CreateSubcategory {
@@ -21,8 +22,8 @@ interface UpdateSubategory {
 @Injectable()
 export class SubcategoryServices {
     constructor(
-        @InjectModel(catName) private cat:Model<CategoryDoc>,
-        @InjectModel(subName) private sub:Model<SubcategoryDoc>,
+        @InjectModel(Models.CATEGOY) private cat:Model<CategoryDoc>,
+        @InjectModel(Models.SUBCATEGORY) private sub:Model<SubcategoryDoc>,
         private api:apiFactory<CategoryDoc>
     ){};
     getAllSubs(query:queryInterface){

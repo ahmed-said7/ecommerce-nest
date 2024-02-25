@@ -1,10 +1,10 @@
 import { Injectable, HttpException, UseInterceptors} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserDoc, name } from "./user.entity";
+import { UserDoc} from "./user.entity";
 import { Model} from "mongoose";
 import * as bcrypt from "bcryptjs";
 import { UserSerializerInterceptor } from "./interceptor/user.serialize.interceptor";
-import { ProtectInterceptor } from "src/interceptors/protect.interceptor";
+import { Models } from "src/enums/models.enum";
 
 
 interface updateLoggedUser {
@@ -22,9 +22,8 @@ interface updateLoggedUserPassword {
 
 @Injectable()
 @UseInterceptors(UserSerializerInterceptor)
-@UseInterceptors(ProtectInterceptor)
 export class LoggedUserServices {
-    constructor(@InjectModel(name) private model:Model<UserDoc>){};
+    constructor(@InjectModel(Models.USER) private model:Model<UserDoc>){};
     getLoggedUser(user:UserDoc){
         return {user};
     };

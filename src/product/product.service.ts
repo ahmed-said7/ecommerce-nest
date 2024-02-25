@@ -10,6 +10,7 @@ import { SubcategoryDoc , name as subName } from "src/subcategory/subcategory.en
 import { BrandDoc,name as brandName } from "src/brand/brand.entity";
 import { ReviewServices } from "src/reviews/reviews.service";
 import { UserDoc } from "src/user/user.entity";
+import { Models } from "src/enums/models.enum";
 
 export interface CreateProduct {
     title: string;
@@ -48,10 +49,10 @@ export interface UpdateProduct {
 export class ProductServices {
     constructor(
         private reviewService: ReviewServices,
-        @InjectModel(prodName) private prod:Model<ProductDoc>,
-        @InjectModel(subName) private sub:Model<SubcategoryDoc>,
-        @InjectModel(catName) private cat:Model<CategoryDoc>,
-        @InjectModel(brandName) private brand:Model<BrandDoc>,
+        @InjectModel(Models.PRODUCT) private prod:Model<ProductDoc>,
+        @InjectModel(Models.SUBCATEGORY) private sub:Model<SubcategoryDoc>,
+        @InjectModel(Models.CATEGOY) private cat:Model<CategoryDoc>,
+        @InjectModel(Models.BRAND) private brand:Model<BrandDoc>,
         private api:apiFactory<ProductDoc>
     ){};
     async getAllProds(query:queryInterface){

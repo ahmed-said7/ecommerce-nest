@@ -1,9 +1,7 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { name, userSchema } from "./user.entity";
 import { AuthContoller} from "./auth.controller";
 import { AuthServices} from "./auth.service";
-import * as bcrypt from "bcryptjs";
 import { apiModule } from "../utils/api";
 import { NodemailerModule } from "src/nodemailer/nodemailer.module";
 import { LoggedContoller } from "./logged.controller";
@@ -12,10 +10,11 @@ import { UserServices } from "./user.service";
 import { LoggedUserServices } from "./logged.services";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/schema.definition";
+import { Models } from "src/enums/models.enum";
 
 @Module({
     imports:[SchemaDefinitionModule,MongooseModule.forFeatureAsync([{
-        name:name,
+        name:Models.USER,
         useFactory:function(schema:SchemaDefinition) {
             return schema.user();
         },inject:[SchemaDefinition]

@@ -7,6 +7,7 @@ import * as bcrypt from "bcryptjs";
 import { NodemailerServices } from "src/nodemailer/nodemailer.services";
 import * as crypto from "crypto";
 import { ConfigService } from "@nestjs/config";
+import { Models } from "src/enums/models.enum";
 
 
 class CreateUser{
@@ -28,7 +29,7 @@ export class AuthServices {
     
     constructor
     ( 
-        @InjectModel(name) private model: Model<UserDoc> ,
+        @InjectModel(Models.USER) private model: Model<UserDoc> ,
         private nodemailerService:NodemailerServices,
         private config:ConfigService
     ){};

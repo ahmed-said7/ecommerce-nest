@@ -1,39 +1,36 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { apiModule } from "src/utils/api";
-import { name as userName } from "src/user/user.entity";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
 import { CartServices } from "./cart.service";
 import { CartController } from "./cart.controller";
-import { name as productName } from "src/product/product.entity";
-import { name as cartName } from "./cart.entity";
-import { name as couponName } from "src/coupon/coupon.entity";
+import { Models } from "src/enums/models.enum";
 
 
 @Module({
     imports:
     [SchemaDefinitionModule,MongooseModule.forFeatureAsync([
         {
-            name:productName
+            name:Models.PRODUCT
             ,useFactory:function(schema:SchemaDefinition){
                 return schema.product();
             },inject:[SchemaDefinition]
         },
         {
-            name:userName,
+            name:Models.USER,
             useFactory:function(schema:SchemaDefinition){
                 return schema.user();
             },inject:[SchemaDefinition]
         },
         {
-            name:cartName,
+            name:Models.CART,
             useFactory:function(schema:SchemaDefinition){
                 return schema.cart();
             },inject:[SchemaDefinition]
         },
         {
-            name:couponName,
+            name:Models.COUPON,
             useFactory:function(schema:SchemaDefinition){
                 return schema.coupon();
             },inject:[SchemaDefinition]

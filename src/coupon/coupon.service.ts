@@ -3,7 +3,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
 import { queryInterface } from "src/utils/api.features";
-import { CouponDoc,name } from "./coupon.entity";
+import { CouponDoc } from "./coupon.entity";
+import { Models } from "src/enums/models.enum";
 
 
 
@@ -21,7 +22,7 @@ interface UpdateCoupon {
 @Injectable()
 export class CouponServices {
     constructor(
-        @InjectModel(name) private model:Model<CouponDoc>,
+        @InjectModel(Models.COUPON) private model:Model<CouponDoc>,
         private api:apiFactory<CouponDoc>
     ){};
     getAllCoupons(query:queryInterface){

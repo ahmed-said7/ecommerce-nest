@@ -3,10 +3,11 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
 import { queryInterface } from "src/utils/api.features";
-import { ReviewDoc,name as reviewName } from "./reviews.entity";
-import { ProductDoc,name } from "src/product/product.entity";
+import { ReviewDoc} from "./reviews.entity";
+import { ProductDoc } from "src/product/product.entity";
 import { UserDoc } from "src/user/user.entity";
 import { OnEvent } from '@nestjs/event-emitter';
+import { Models } from "src/enums/models.enum";
 interface CreateReview {
     review?: string;
     rating: number;
@@ -23,9 +24,9 @@ interface UpdateReview {
 @Injectable()
 export class ReviewServices {
     constructor(
-        @InjectModel(reviewName) private model:Model<ReviewDoc>,
+        @InjectModel(Models.REVIEW) private model:Model<ReviewDoc>,
         private api:apiFactory<ReviewDoc>,
-        @InjectModel(name) private prod:Model<ProductDoc>,
+        @InjectModel(Models.PRODUCT) private prod:Model<ProductDoc>,
     ){};
     getAllReviews(query:queryInterface){
         return this.api.getAll(this.model,query);

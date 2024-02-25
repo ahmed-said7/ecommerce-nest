@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { UserDoc, name } from "./user.entity";
 import { Model, ObjectId, model } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
+import { Models } from "src/enums/models.enum";
 
 
 interface updateUser {
@@ -34,7 +35,7 @@ export interface queryInterface {
 @Injectable()
 export class UserServices {
     constructor(
-        @InjectModel(name) private model:Model<UserDoc>,
+        @InjectModel(Models.USER) private model:Model<UserDoc>,
         private factory:apiFactory<UserDoc>
     ){};
     getAllUsers(query:queryInterface){

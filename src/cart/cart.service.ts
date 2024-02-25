@@ -1,12 +1,12 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-
 import mongoose, { Model, ObjectId } from "mongoose";
-import { ProductDoc , name as prodName } from "src/product/product.entity";
+import { ProductDoc } from "src/product/product.entity";
 import { apiFactory } from "src/utils/api.factory";
-import { CartDoc , name as cartName } from "./cart.entity";
+import { CartDoc } from "./cart.entity";
 import { UserDoc } from "src/user/user.entity";
-import { CouponDoc,name as couponName } from "src/coupon/coupon.entity";
+import { CouponDoc} from "src/coupon/coupon.entity";
+import { Models } from "src/enums/models.enum";
 
 
 
@@ -17,16 +17,16 @@ export interface addProductToCart {
     price?:number;
 };
 export interface UpdateProductQuantity {
-    product:mongoose.Types.ObjectId;
+    itemId:mongoose.Types.ObjectId;
     quantity:number;
 };
 
 @Injectable()
 export class CartServices {
     constructor(
-        @InjectModel(prodName) private prod:Model<ProductDoc>,
-        @InjectModel(cartName) private cart:Model<CartDoc>,
-        @InjectModel(couponName) private coupon:Model<CouponDoc>,
+        @InjectModel(Models.PRODUCT) private prod:Model<ProductDoc>,
+        @InjectModel(Models.CART) private cart:Model<CartDoc>,
+        @InjectModel(Models.COUPON) private coupon:Model<CouponDoc>,
         private api:apiFactory<CartDoc>
     ){};
     async addProductToCart(user:UserDoc,body:addProductToCart){
@@ -60,7 +60,7 @@ export class CartServices {
         if(!cart){
             throw new HttpException('cart not found',400);
         };
-        const idx=cart.cartItems.findIndex( item => item.product.toString() === body.product.toString() );
+        const idx=cart.cartItems.findIndex( item => item._id.toString() === body.itemId.toString() );
         if(idx > -1){
             cart.cartItems[idx].quantity=body.quantity;
             cart.totalCartPrice=this.calcPrice(cart.cartItems);

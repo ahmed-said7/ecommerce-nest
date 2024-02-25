@@ -1,11 +1,11 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { CategoryDoc, name } from "./category.entity";
-import mongoose, { Model, ObjectId } from "mongoose";
+import { CategoryDoc} from "./category.entity";
+import { Model, ObjectId } from "mongoose";
 import { apiFactory } from "src/utils/api.factory";
 import { queryInterface } from "src/utils/api.features";
 import { CreateSubcategory, SubcategoryServices } from "src/subcategory/subcategory.service";
-import { SubcategoryDoc, name as subName } from "src/subcategory/subcategory.entity";
+import { Models } from "src/enums/models.enum";
 
 interface CreateCategory {
     name: string;
@@ -20,7 +20,7 @@ interface UpdateCategory {
 @Injectable()
 export class CategoryServices {
     constructor(
-        @InjectModel(name) private model:Model<CategoryDoc>,
+        @InjectModel(Models.CATEGOY) private model:Model<CategoryDoc>,
         private api:apiFactory<CategoryDoc>,
         private subcategoryService:SubcategoryServices
     ){};

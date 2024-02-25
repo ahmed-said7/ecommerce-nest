@@ -11,13 +11,15 @@ import { UserDoc, userSchema } from "src/user/user.entity";
 import * as bcrypt from "bcryptjs"
 import { cartSchema } from "src/cart/cart.entity";
 import { couponSchema } from "src/coupon/coupon.entity";
+import { OrderDoc, orderSchema } from "src/order/order.entity";
 
 @Injectable()
 export class SchemaDefinition {
     constructor(private events:EventEmitter2,private config:ConfigService){};
     private SetImage(doc:{image:string},file:string){
         if(doc.image){
-            doc.image=`http://${this.config.get<string>('root_url')}/${file}/${doc.image}`;
+            const image=doc.image;
+            doc.image=`http://${this.config.get<string>('root_url')}/${file}/${image}`;
         };
     };
     category(){
@@ -96,6 +98,13 @@ export class SchemaDefinition {
     };
     cart(){ return cartSchema};
     coupon(){ return couponSchema};
+    order(){
+        orderSchema.pre< Query < OrderDoc[] | OrderDoc , OrderDoc > >(/^find/,function(){
+            this.populate({path:"cartItems.product",select:"title imageCover"})
+            .populate({path:"user",select:"name email image"});
+        });
+        return orderSchema;
+    };
 };
 
 @Global()

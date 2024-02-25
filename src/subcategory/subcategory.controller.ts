@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
-
 import { ObjectId } from "mongoose";
 import { CreateSubcategoryDto } from "./dto/create.dto";
 import { UpdateSubcategoryDto } from "./dto/update.dto";
@@ -7,7 +6,6 @@ import { SubcategoryServices } from "./subcategory.service";
 import { queryInterface } from "src/utils/api.features";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { fileValidationPipe } from "./pipe/file.pipe";
-import { ProtectInterceptor } from "src/interceptors/protect.interceptor";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 

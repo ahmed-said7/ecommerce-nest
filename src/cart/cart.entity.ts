@@ -25,6 +25,7 @@ export const cartSchema = new mongoose.Schema({
 
 export interface CartDoc extends mongoose.Document {
     cartItems: {
+        _id?:mongoose.Types.ObjectId
         product: mongoose.Types.ObjectId
         quantity: number,
         color: string,
