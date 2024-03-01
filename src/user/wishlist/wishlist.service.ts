@@ -3,12 +3,13 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Models } from "src/enums/models.enum";
 import { UserDoc } from "../user.entity";
 import { Model, ObjectId } from "mongoose";
+import { ProductDoc } from "src/product/product.entity";
 
 @Injectable()
 export class WishlistServices {
     constructor( 
         @InjectModel(Models.USER) private user:Model<UserDoc> ,
-        @InjectModel(Models.PRODUCT) private product:Model<UserDoc>
+        @InjectModel(Models.PRODUCT) private product:Model<ProductDoc>
     ){};
     addToWishlist(id:ObjectId,{_id}:UserDoc){
         this.validateProduct(id);

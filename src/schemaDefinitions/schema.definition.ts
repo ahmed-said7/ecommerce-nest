@@ -1,7 +1,7 @@
 import { Global, Injectable, Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { EventEmitter2, EventEmitterModule } from "@nestjs/event-emitter";
-import { Query } from "mongoose";
+import mongoose, { Model, ObjectId, Query } from "mongoose";
 import { BrandDoc, brandSchema } from "src/brand/brand.entity";
 import { categorySchema,CategoryDoc } from "src/category/category.entity";
 import { ProductDoc, productSchema } from "src/product/product.entity";
@@ -12,10 +12,18 @@ import * as bcrypt from "bcryptjs"
 import { cartSchema } from "src/cart/cart.entity";
 import { couponSchema } from "src/coupon/coupon.entity";
 import { OrderDoc, orderSchema } from "src/order/order.entity";
+import { InjectModel, MongooseModule } from "@nestjs/mongoose";
+import { Models } from "src/enums/models.enum";
+import { ReviewModule } from "src/reviews/reviews.module";
 
 @Injectable()
 export class SchemaDefinition {
-    constructor(private events:EventEmitter2,private config:ConfigService){};
+    constructor(
+        // private events:EventEmitter2,
+        @InjectModel(Models.PRODUCT) private prodModel:Model<ProductDoc>,
+        @InjectModel(Models.REVIEW) private reviewModel:Model<ReviewDoc>,
+        private config:ConfigService
+        ){};
     private SetImage(doc:{image:string},file:string){
         if(doc.image){
             const image=doc.image;
@@ -89,10 +97,12 @@ export class SchemaDefinition {
             this.populate({ path:"user",select:"name image"  });
         });
         reviewSchema.post('save',function(){
-            self.events.emit('review-saved',{product:this.product});
+            // self.events.emit('review-saved',{product:this.product});
+            self.updateProduct(this.product);
         });
         reviewSchema.post("deleteOne",{document:true,query:false},function(){
-            self.events.emit('review-removed',{product:this.product});
+            self.updateProduct(this.product);
+            // self.events.emit('review-removed',{product:this.product});
         });
         return reviewSchema;
     };
@@ -105,12 +115,39 @@ export class SchemaDefinition {
         });
         return orderSchema;
     };
+    private async calcAvg(id:mongoose.Types.ObjectId){
+        const result=await this.reviewModel.aggregate([
+            { $match:{product:id} } , { 
+                $group : { _id : "$product" , quantity : {$sum:1} , average : {$avg:"$rating"}     } 
+            }
+        ]);
+        if(result.length > 0){
+            return { quantity: result[0].quantity , average: result[0].average };
+        }else {
+            return { quantity: 0 , average: 0 };
+        };
+    }
+    private async updateProduct(id:mongoose.Types.ObjectId){
+        const {quantity:ratingQuantity,average:ratingAverage}=await this.calcAvg(id);
+        await this.prodModel.
+        findByIdAndUpdate( id , { ratingQuantity ,ratingAverage } , { new : true } );
+    };
 };
 
 @Global()
-@Module({ 
-    imports:[EventEmitterModule.forRoot(),ConfigModule.forRoot()],
-    exports:[SchemaDefinition],
-    providers:[SchemaDefinition]
+@Module({
+    imports:[
+        MongooseModule.forFeatureAsync([
+                {
+                    name:Models.PRODUCT,
+                    useFactory:function(){return productSchema}
+                },
+                {
+                    name:Models.REVIEW,
+                    useFactory:function(){return reviewSchema}
+                }
+            ])],
+    providers:[SchemaDefinition,ConfigService],
+    exports:[SchemaDefinition]
 })
 export class SchemaDefinitionModule {};

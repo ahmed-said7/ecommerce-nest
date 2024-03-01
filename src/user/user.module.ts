@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
+import {  MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AuthContoller} from "./auth/auth.controller";
 import { AuthServices} from "./auth/auth.service";
@@ -16,20 +16,28 @@ import { AddressServices } from "./address/adress.service";
 import { WishlistController } from "./wishlist/wishlist.controller";
 import { addressController } from "./address/address.controller";
 
+
 @Module({
     imports:[SchemaDefinitionModule,MongooseModule.forFeatureAsync([{
         name:Models.USER,
         useFactory:function(schema:SchemaDefinition) {
             return schema.user();
         },inject:[SchemaDefinition]
+    },{
+        name:Models.PRODUCT,
+        useFactory:function(schema:SchemaDefinition) {
+            return schema.product();
+        },inject:[SchemaDefinition]
     }]) , apiModule , NodemailerModule ],
     controllers:[AuthContoller,UserContoller,LoggedContoller,WishlistController,addressController],
     providers:[AuthServices,UserServices,LoggedUserServices,WishlistServices,AddressServices]
 })
 
+
 export class UserModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(ProtectMiddleware)
-            .forRoutes(UserContoller,LoggedContoller,WishlistController,addressController);
+            .forRoutes
+            (UserContoller,LoggedContoller,WishlistController,addressController);
     };
 };

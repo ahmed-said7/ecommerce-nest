@@ -72,28 +72,28 @@ export class ReviewServices {
         if( review.data.user._id.toString() === user._id.toString() ) return true;
         throw new HttpException('you are not allowed to access review',400);
     }
-    private async calcAvg(id:ObjectId){
-        const result=await this.model.aggregate([
-            { $match:{product:id} } , { 
-                $group : { _id : "$product" , quantity : {$sum:1} , average : {$avg:"$rating"}     } 
-            }
-        ]);
-        if(result.length > 0){
-            return { quantity: result[0].quantity , average: result[0].average };
-        }else {
-            return { quantity: 0 , average: 0 };
-        };
-    }
-    private async updateProduct(id:ObjectId){
-        const {quantity:ratingQuantity,average:ratingAverage}=await this.calcAvg(id);
-        await this.prod.findByIdAndUpdate( id , { ratingQuantity ,ratingAverage } , { new : true } );
-    };
-    @OnEvent('review-saved')
-    async handleReviewSaved(obj:{product:ObjectId}){
-        this.updateProduct(obj.product);
-    };
-    @OnEvent('review-removed')
-    async handleReviewRemoved(obj:{product:ObjectId}){
-        this.updateProduct(obj.product);
-    };
+    // private async calcAvg(id:ObjectId){
+    //     const result=await this.model.aggregate([
+    //         { $match:{product:id} } , { 
+    //             $group : { _id : "$product" , quantity : {$sum:1} , average : {$avg:"$rating"}     } 
+    //         }
+    //     ]);
+    //     if(result.length > 0){
+    //         return { quantity: result[0].quantity , average: result[0].average };
+    //     }else {
+    //         return { quantity: 0 , average: 0 };
+    //     };
+    // }
+    // private async updateProduct(id:ObjectId){
+    //     const {quantity:ratingQuantity,average:ratingAverage}=await this.calcAvg(id);
+    //     await this.prod.findByIdAndUpdate( id , { ratingQuantity ,ratingAverage } , { new : true } );
+    // };
+    // @OnEvent('review-saved')
+    // async handleReviewSaved(obj:{product:ObjectId}){
+    //     this.updateProduct(obj.product);
+    // };
+    // @OnEvent('review-removed')
+    // async handleReviewRemoved(obj:{product:ObjectId}){
+    //     this.updateProduct(obj.product);
+    // };
 };

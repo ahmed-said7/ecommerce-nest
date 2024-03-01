@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+
+import { Module, forwardRef } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from "@nestjs/mongoose";
@@ -11,6 +12,10 @@ import {ConfigModule,ConfigService} from "@nestjs/config";
 import { CartModule } from './cart/cart.module';
 import { CouponModule } from './coupon/coupon.module';
 import { SubcategoryModule } from './subcategory/subcategory.module';
+import { OrderModule } from './order/order.module';
+// import { OrderModule } from './order/order.module';
+// OrderModule
+
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal:true,envFilePath:"src/.env"}),
@@ -21,7 +26,7 @@ import { SubcategoryModule } from './subcategory/subcategory.module';
         return { uri : config.get<string>('url') };
     }}),
     SubcategoryModule,
-    UserModule
+    UserModule,OrderModule
     ,BrandModule,CartModule,CouponModule,
     CategoryModule,
     ProductModule,ReviewModule
