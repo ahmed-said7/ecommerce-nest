@@ -35,7 +35,11 @@ export class UpdateProductDto {
     ratingAverage: number;
     @IsOptional()
     ratingQuantity: number;
-    constructor(dto:Partial<UpdateProductDto>){
-        Object.assign(this,dto);
-    };
+    @IsOptional()
+    @IsArray()
+    images: string [];
+    
+    @IsOptional()
+    @IsString()
+    imageCover: string;
 };

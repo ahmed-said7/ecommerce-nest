@@ -5,7 +5,6 @@ import { CreateBrandDto } from "./dto/create.dto";
 import { UpdateBrandDto } from "./dto/upate.dto";
 import { BrandServices } from "./brand.services";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { fileValidationPipe } from "./pipes/file.pipe";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { FileInterceptorImage } from "src/interceptors/file.interceptor";
@@ -36,10 +35,8 @@ export class BrandController {
     @UseGuards(AuthorizationGuard)
     updateBrand(
         @Param('id') id:ObjectId,
-        @Body() body:UpdateBrandDto,
-        @UploadedFile(fileValidationPipe) image:string
-        ){
-        return this.brandService.updateBrand(id,{ ... body , image });
+        @Body() body:UpdateBrandDto){
+        return this.brandService.updateBrand(id,body);
     };
     
     @Delete(":id")
@@ -54,7 +51,7 @@ export class BrandController {
     @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager'])
     @UseGuards(AuthorizationGuard)
-    createBrand(@Body() body:CreateBrandDto,@UploadedFile(fileValidationPipe) image:string){
-        return this.brandService.createBrand({...body,image});
+    createBrand(@Body() body:CreateBrandDto){
+        return this.brandService.createBrand(body);
     };
 };

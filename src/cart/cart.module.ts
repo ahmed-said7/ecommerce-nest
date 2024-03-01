@@ -6,6 +6,9 @@ import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/s
 import { CartServices } from "./cart.service";
 import { CartController } from "./cart.controller";
 import { Models } from "src/enums/models.enum";
+import { productSchema } from "src/product/product.entity";
+import { userSchema } from "src/user/user.entity";
+import { couponSchema } from "src/coupon/coupon.entity";
 
 
 @Module({
@@ -13,14 +16,14 @@ import { Models } from "src/enums/models.enum";
     [SchemaDefinitionModule,MongooseModule.forFeatureAsync([
         {
             name:Models.PRODUCT
-            ,useFactory:function(schema:SchemaDefinition){
-                return schema.product();
+            ,useFactory:function(){
+                return productSchema;
             },inject:[SchemaDefinition]
         },
         {
             name:Models.USER,
-            useFactory:function(schema:SchemaDefinition){
-                return schema.user();
+            useFactory:function(){
+                return userSchema;
             },inject:[SchemaDefinition]
         },
         {
@@ -31,8 +34,8 @@ import { Models } from "src/enums/models.enum";
         },
         {
             name:Models.COUPON,
-            useFactory:function(schema:SchemaDefinition){
-                return schema.coupon();
+            useFactory:function(){
+                return couponSchema;
             },inject:[SchemaDefinition]
         }
     ]),apiModule],

@@ -6,6 +6,7 @@ import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/s
 import { CouponController } from "./coupon.controller";
 import { CouponServices } from "./coupon.service";
 import { Models } from "src/enums/models.enum";
+import { userSchema } from "src/user/user.entity";
 
 
 @Module({
@@ -14,13 +15,13 @@ import { Models } from "src/enums/models.enum";
         {
             name:Models.COUPON
             ,useFactory:function(schema:SchemaDefinition){
-                schema.coupon();
+                return schema.coupon();
             },inject:[SchemaDefinition]
         },
         {
             name:Models.USER,
-            useFactory:function(schema:SchemaDefinition){
-                return schema.user();
+            useFactory:function(){
+                return userSchema;
             },inject:[SchemaDefinition]
         }
     ]),apiModule],

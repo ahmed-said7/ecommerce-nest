@@ -32,8 +32,8 @@ export class LoggedContoller {
     @UseInterceptors(FileInterceptorImage)
     @Roles(['admin','user','manager'])
     @UseGuards(AuthorizationGuard)
-    updateLoggedUser(@User() user : UserDoc,@Body() body :UpdateUserDto,@UploadedFile(fileValidationPipe) image?:string ){
-        return this.loggedServices.updateLoggedUser(user,{...body,image});
+    updateLoggedUser(@User() user : UserDoc,@Body() body :UpdateUserDto ){
+        return this.loggedServices.updateLoggedUser(user,body);
     };
 
     @Delete('')

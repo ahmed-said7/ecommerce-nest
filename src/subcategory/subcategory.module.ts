@@ -3,9 +3,9 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { name as subName } from "./subcategory.entity";
 import { SubcategoryController } from "./subcategory.controller";
 import { SubcategoryServices } from "./subcategory.service";
-import { name as catName } from "src/category/category.entity";
+import { name as catName, categorySchema } from "src/category/category.entity";
 import { apiModule } from "src/utils/api";
-import {  name as userName } from "src/user/user.entity";
+import {  name as userName, userSchema } from "src/user/user.entity";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinition} from "src/schemaDefinitions/schema.definition";
 
@@ -14,12 +14,12 @@ import { SchemaDefinition} from "src/schemaDefinitions/schema.definition";
     exports:[SubcategoryServices],
     imports:
     [apiModule, MongooseModule.forFeatureAsync( [ 
-                {name:userName,useFactory:function(schema:SchemaDefinition) {
-                    return schema.user();
-                },inject:[SchemaDefinition] },
+                {name:userName,useFactory:function() {
+                    return userSchema;
+                } },
                 {name:catName,useFactory:function(schema:SchemaDefinition) {
-                    return schema.category();
-                },inject:[SchemaDefinition] },
+                    return categorySchema;
+                } },
                 {name:subName,useFactory:function(schema:SchemaDefinition) {
                     return schema.subcategory();
                 },inject:[SchemaDefinition]  }

@@ -22,8 +22,8 @@ export class UserContoller {
     @UseInterceptors(FileInterceptorImage)
     @Roles(["admin","user"])
     @UseGuards(AuthorizationGuard)
-    createUser(@Body() body : CreateUserDto , @UploadedFile(fileValidationPipe) image?:string ){
-        return this.userServices.createUser({...body,image});
+    createUser(@Body() body : CreateUserDto ){
+        return this.userServices.createUser(body);
     };
 
     @Get(':id')
@@ -45,9 +45,8 @@ export class UserContoller {
     @UseInterceptors(FileInterceptorImage)
     @Roles(["admin","user"])
     @UseGuards(AuthorizationGuard)
-    uptdateUser(@Param('id') id : ObjectId,@Body() body:UpdateUserDto
-        ,@UploadedFile(fileValidationPipe) image?:string ){
-        return this.userServices.updateUser(id,{...body,image});
+    uptdateUser(@Param('id') id : ObjectId,@Body() body:UpdateUserDto ){
+        return this.userServices.updateUser(id,body);
     };
 
     @Delete(':id')

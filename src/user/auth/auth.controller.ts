@@ -17,8 +17,8 @@ export class AuthContoller {
     @Post('signup')
     @UseInterceptors(FileInterceptor('image'))
     @UseInterceptors(FileInterceptorImage)
-    signup(@Body() body : CreateUserDto,@UploadedFile(fileValidationPipe) image?:string ){
-        return this.authServices.signup({...body,image});
+    signup(@Body() body : CreateUserDto){
+        return this.authServices.signup(body);
     };
 
     @Post('login')

@@ -7,6 +7,8 @@ import { apiFactory } from "src/utils/api.factory";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/schema.definition";
 import { Models } from "src/enums/models.enum";
+import { userSchema } from "src/user/user.entity";
+import { productSchema } from "src/product/product.entity";
 
 
 @Module({
@@ -19,12 +21,11 @@ import { Models } from "src/enums/models.enum";
             {
                 name:Models.PRODUCT,
                 useFactory:
-                function(schema:SchemaDefinition){return schema.product()}
-                ,inject:[SchemaDefinition]},
+                function(){return productSchema}
+            },
             {
                     name:Models.USER,
-                    useFactory:function(schema:SchemaDefinition){return schema.user() }
-                    ,inject:[SchemaDefinition]
+                    useFactory:function(){return userSchema }
             },
             {
                 name:Models.REVIEW,

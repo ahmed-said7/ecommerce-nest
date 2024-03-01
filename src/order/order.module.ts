@@ -1,6 +1,5 @@
 import { Module,MiddlewareConsumer, NestModule, RequestMethod } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-
 import { OrderServices } from "./order.service";
 import { OrderController } from "./order.controller";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -9,6 +8,9 @@ import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/s
 import { Models } from "src/enums/models.enum";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { StripeModule } from "src/stripe/stripe.module";
+import { userSchema } from "src/user/user.entity";
+import { productSchema } from "src/product/product.entity";
+import { cartSchema } from "src/cart/cart.entity";
 
 @Module({
     imports:[
@@ -16,16 +18,16 @@ import { StripeModule } from "src/stripe/stripe.module";
         SchemaDefinitionModule,
         MongooseModule.forFeatureAsync([
                 {name:Models.USER,
-                useFactory:function(schema:SchemaDefinition){return schema.user()}
+                useFactory:function(){return userSchema}
                 ,inject:[SchemaDefinition]},
                 {name:Models.PRODUCT,
-                useFactory:function(schema:SchemaDefinition){return schema.product()},
+                useFactory:function(){return productSchema},
                 inject:[SchemaDefinition]},
                 {name:Models.ORDER,
                     useFactory:function(schema:SchemaDefinition){return schema.order()},
                     inject:[SchemaDefinition]},
                 {name:Models.CART,
-                        useFactory:function(schema:SchemaDefinition){return schema.cart()},
+                        useFactory:function(){return cartSchema},
                         inject:[SchemaDefinition]}
             ])
     ],

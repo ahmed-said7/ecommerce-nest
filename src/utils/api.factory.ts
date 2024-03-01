@@ -29,7 +29,7 @@ export class apiFactory <T extends mongoose.Document> {
         if(!data){
             throw new HttpException('doc not found',400);
         };
-        console.log(data);
+        // console.log(data);
         return {data};
     };
 
@@ -43,12 +43,11 @@ export class apiFactory <T extends mongoose.Document> {
     };
 
     async getAll(model:Model<T>,queryObj:queryInterface,obj?:object){
-        const {paginationObj,query}
+        const {query,paginationObj}
         =await new apiFeatures<T>( model.find() , queryObj )
             .filter( obj || {} )
             .sort()
-            .select()
-            .pagination();
+            .select();
         const data=await query;
         return { data , pagination:paginationObj };
     };

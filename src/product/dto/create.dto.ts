@@ -43,6 +43,14 @@ export class CreateProductDto {
     @IsArray()
     subcategories: ObjectId [];
     
+    @IsOptional()
+    @IsArray()
+    images: string [];
+    
+    @IsNotEmpty()
+    @IsString()
+    imageCover: string;
+
     @IsNotEmpty()
     @IsMongoId()
     brand: ObjectId;
@@ -55,8 +63,6 @@ export class CreateProductDto {
     @IsNumber()
     ratingQuantity: number;
     
-    constructor(dto:Partial<CreateProductDto>){
-        Object.assign(this,dto);
-    };
+    
 
 };

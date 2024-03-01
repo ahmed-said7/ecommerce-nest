@@ -34,9 +34,6 @@ export class CategoryServices {
         return this.api.getOne(this.model,id);
     };
     async createCat(body:CreateCategory){
-        if(!body.image){
-            throw new HttpException('image is required',400);
-        };
         const cat=await this.model.create(body);
         if(! cat){
             throw new HttpException('Cannot create category',400);

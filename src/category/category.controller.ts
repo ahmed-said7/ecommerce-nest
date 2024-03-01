@@ -1,17 +1,16 @@
 import { Body,Controller, Delete, Get, Param, Patch, Post,
-        Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+        Query,UseGuards, UseInterceptors } from "@nestjs/common";
 
 import { CategoryServices } from "./category.services";
 import { queryInterface } from "src/user/admin-features/user.service";
 import { ObjectId } from "mongoose";
 import { UpdateCategoryDto } from "./dto/update.dto";
 import { CreateCategoryDto } from "./dto/create.dto";
-import { fileValidationPipe } from "./pipe/file.pipe";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
-import { fileValidationPipe as subValidationPipe } from "src/subcategory/pipe/file.pipe";
 import { FileInterceptorImage } from "src/interceptors/file.interceptor";
+import { CreateSubcategoryDto } from "src/subcategory/dto/create.dto";
 
 @Controller('category')
 export class CategoryController {
@@ -37,10 +36,8 @@ export class CategoryController {
     @UseGuards(AuthorizationGuard)
     updateCat(
         @Param('id') id:ObjectId,
-        @Body() body:UpdateCategoryDto,
-        @UploadedFile(fileValidationPipe) image?:string
-        ){
-        return this.categoryService.updateCat(id,{...body,image});
+        @Body() body:UpdateCategoryDto){
+        return this.categoryService.updateCat(id,body);
     };
     
     @Delete(":id")
@@ -55,9 +52,8 @@ export class CategoryController {
     @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager'])
     @UseGuards(AuthorizationGuard)
-    createCat(@Body() body:CreateCategoryDto,
-        @UploadedFile(fileValidationPipe) image?:string){
-        return this.categoryService.createCat({...body,image});
+    createCat(@Body() body:CreateCategoryDto){
+        return this.categoryService.createCat(body);
     };
 
     @Get(':id/subcategory')
@@ -72,8 +68,7 @@ export class CategoryController {
     @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager','user'])
     @UseGuards(AuthorizationGuard)
-    createSub(@Query('id') category:ObjectId,@Body('name') name:string, 
-        @UploadedFile(subValidationPipe) image?:string ){
-        return this.categoryService.createSubcategory({category,name,image});
+    createSub(@Query('id') category:ObjectId,@Body() body:CreateSubcategoryDto ){
+        return this.categoryService.createSubcategory(body);
     };
 };

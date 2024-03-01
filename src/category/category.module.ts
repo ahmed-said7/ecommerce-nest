@@ -7,6 +7,7 @@ import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
 import { SubcategoryModule } from "src/subcategory/subcategory.module";
 import { Models } from "src/enums/models.enum";
+import { userSchema } from "src/user/user.entity";
 
 
 @Module({
@@ -20,8 +21,8 @@ import { Models } from "src/enums/models.enum";
         },
         {
             name:Models.USER,
-            useFactory:function(schema:SchemaDefinition){
-                return schema.user();
+            useFactory:function(){
+                return userSchema;
             },inject:[SchemaDefinition]
         }
     ]),apiModule],

@@ -33,7 +33,11 @@ export class SchemaDefinition {
     category(){
         const self=this;
         categorySchema.post<CategoryDoc>('init',function(doc){
-            self.SetImage(doc,'category');
+            // console.log(doc);
+            // self.SetImage(doc,'category');
+            const image=doc.image;
+            console.log(doc);
+            doc.image=`${self.config.get<string>('root_url')}/category/${image}`;
         });
         return categorySchema;
     };

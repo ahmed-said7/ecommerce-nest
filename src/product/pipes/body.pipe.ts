@@ -17,7 +17,7 @@ export class bodyCreateProductValidationPipe implements PipeTransform {
             };
         });
         console.log(value);
-        return new CreateProductDto(value);
+        return new CreateProductDto();
     };
 };
 
@@ -35,6 +35,6 @@ export class bodyUpdateProductValidationPipe implements PipeTransform {
             };
         });
         console.log(value);
-        return new UpdateProductDto(value);
+        return new UpdateProductDto();
     };
 };

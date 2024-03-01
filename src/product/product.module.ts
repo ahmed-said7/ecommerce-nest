@@ -7,6 +7,10 @@ import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
 import { ReviewModule } from "src/reviews/reviews.module";
 import { Models } from "src/enums/models.enum";
+import { categorySchema } from "src/category/category.entity";
+import { userSchema } from "src/user/user.entity";
+import { brandSchema } from "src/brand/brand.entity";
+import { subcategorySchema } from "src/subcategory/subcategory.entity";
 
 
 @Module({
@@ -15,19 +19,19 @@ import { Models } from "src/enums/models.enum";
         SchemaDefinitionModule,
         MongooseModule.forFeatureAsync([
                 {name:Models.CATEGOY,
-                useFactory:function(schema:SchemaDefinition){return schema.category()}
+                useFactory:function(){return categorySchema}
                 ,inject:[SchemaDefinition]},
 
                 {name:Models.USER,
-                useFactory:function(schema:SchemaDefinition){return schema.user()}
+                useFactory:function(){return userSchema}
                 ,inject:[SchemaDefinition]},
 
                 {name:Models.BRAND,
-                useFactory:function(schema:SchemaDefinition){return schema.brand()}
+                useFactory:function(){return brandSchema}
                 ,inject:[SchemaDefinition]},
 
                 {name:Models.SUBCATEGORY,
-                useFactory:function(schema:SchemaDefinition){return schema.subcategory()}
+                useFactory:function(){return subcategorySchema}
                 ,inject:[SchemaDefinition]},
 
                 {name:Models.PRODUCT,

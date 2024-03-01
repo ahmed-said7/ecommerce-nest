@@ -6,6 +6,7 @@ import { apiModule } from "src/utils/api";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
 import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/schema.definition";
 import { Models } from "src/enums/models.enum";
+import { userSchema } from "src/user/user.entity";
 
 
 
@@ -22,8 +23,8 @@ import { Models } from "src/enums/models.enum";
                 ,inject:[SchemaDefinition]
             },
             {
-                name:Models.USER,useFactory:function(schema:SchemaDefinition){
-                    return schema.user();
+                name:Models.USER,useFactory:function(){
+                    return userSchema;
                 }
                 ,inject:[SchemaDefinition]
             }

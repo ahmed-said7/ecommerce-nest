@@ -12,6 +12,8 @@ import { AuthorizationGuard } from "src/guards/user.guard";
 import { User } from "src/decorator/user.decorator";
 import { UserDoc } from "src/user/user.entity";
 import { FileInterceptorProductImage } from "src/interceptors/file.product.interceptor";
+import { CreateProductDto } from "./dto/create.dto";
+import { UpdateProductDto } from "./dto/update.dto";
 
 
 
@@ -42,9 +44,8 @@ export class ProductController {
     @UseGuards(AuthorizationGuard)
     updateSub(
         @Param('id') id:ObjectId,
-        @Body(bodyUpdateProductValidationPipe) body:UpdateProduct,
-        @UploadedFiles(fileValidationPipe) uploaded : { images?:string[]; imageCover?:string; } ){
-        return this.productService.updateProd(id,{...body,... uploaded });
+        @Body() body:UpdateProductDto ){
+        return this.productService.updateProd(id,body);
     };
 
     @Delete(":id")
@@ -59,10 +60,9 @@ export class ProductController {
     @UseInterceptors(FileInterceptorProductImage)
     @Roles(['admin','manager'])
     @UseGuards(AuthorizationGuard)
-    createSub(
-        @Body(bodyCreateProductValidationPipe) body:CreateProduct,
-        @UploadedFiles(fileValidationPipe) uploaded : { images?:string[]; imageCover?:string; } ){
-        return this.productService.createProd({ ... body , ... uploaded });
+    createProd(
+        @Body() body:CreateProductDto){
+        return this.productService.createProd(body);
     };
 
     @Delete(":id/review")
