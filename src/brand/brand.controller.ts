@@ -8,6 +8,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { fileValidationPipe } from "./pipes/file.pipe";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
+import { FileInterceptorImage } from "src/interceptors/file.interceptor";
 
 
 
@@ -30,6 +31,7 @@ export class BrandController {
     
     @Patch(':id')
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager'])
     @UseGuards(AuthorizationGuard)
     updateBrand(
@@ -49,6 +51,7 @@ export class BrandController {
 
     @Post()
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager'])
     @UseGuards(AuthorizationGuard)
     createBrand(@Body() body:CreateBrandDto,@UploadedFile(fileValidationPipe) image:string){

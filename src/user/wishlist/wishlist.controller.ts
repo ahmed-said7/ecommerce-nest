@@ -1,12 +1,15 @@
-import { Controller, Delete, Get, Param, Patch, UseGuards } from "@nestjs/common";
+import { ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, UseGuards, UseInterceptors } from "@nestjs/common";
 import { WishlistServices } from "./wishlist.service";
 import { User } from "src/decorator/user.decorator";
 import { UserDoc } from "../user.entity";
 import { ObjectId } from "mongoose";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { Roles } from "src/decorator/roles.decorator";
+import { UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 
 @Controller('wishlist')
+@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(UserSerializerInterceptor)
 export class WishlistController {
     constructor(private wishlistService: WishlistServices){};
     @Patch(':id')

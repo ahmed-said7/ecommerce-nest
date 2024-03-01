@@ -1,6 +1,6 @@
 import { Global, Injectable, Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { EventEmitter2, EventEmitterModule } from "@nestjs/event-emitter";
+import {  ConfigService } from "@nestjs/config";
+// import { EventEmitter2, EventEmitterModule } from "@nestjs/event-emitter";
 import mongoose, { Model, ObjectId, Query } from "mongoose";
 import { BrandDoc, brandSchema } from "src/brand/brand.entity";
 import { categorySchema,CategoryDoc } from "src/category/category.entity";
@@ -27,20 +27,20 @@ export class SchemaDefinition {
     private SetImage(doc:{image:string},file:string){
         if(doc.image){
             const image=doc.image;
-            doc.image=`http://${this.config.get<string>('root_url')}/${file}/${image}`;
+            doc.image=`${this.config.get<string>('root_url')}/${file}/${image}`;
         };
     };
     category(){
         const self=this;
-        categorySchema.post<CategoryDoc>('init',function(){
-            self.SetImage(this,'category');
+        categorySchema.post<CategoryDoc>('init',function(doc){
+            self.SetImage(doc,'category');
         });
         return categorySchema;
     };
     brand(){
         const self=this;
-        brandSchema.post<BrandDoc>('init',function(){
-            self.SetImage(this,'brand');
+        brandSchema.post<BrandDoc>('init',function(doc){
+            self.SetImage(doc,'brand');
         });
         return brandSchema;
     };
@@ -49,8 +49,8 @@ export class SchemaDefinition {
         subcategorySchema.pre< Query<SubcategoryDoc[]|SubcategoryDoc,SubcategoryDoc>>(/^find/ig,function(){
             this.populate({ path:"category",select:"name image -_id"  });
         });
-        subcategorySchema.post<SubcategoryDoc>('init',function(){
-            self.SetImage(this,'subcategory');
+        subcategorySchema.post<SubcategoryDoc>('init',function(doc){
+            self.SetImage(doc,'subcategory');
         });
         return subcategorySchema;
     };
@@ -73,8 +73,8 @@ export class SchemaDefinition {
                 doc.images=images;
             };
         };
-        productSchema.post<ProductDoc>('init',function(){
-            SetImage(this);
+        productSchema.post<ProductDoc>('init',function(doc){
+            SetImage(doc);
         });
         return productSchema;
     };
@@ -86,8 +86,8 @@ export class SchemaDefinition {
             };
             return next()
         });
-        userSchema.post<UserDoc>('init',function(){
-            self.SetImage(this,'user');
+        userSchema.post<UserDoc>('init',function(doc){
+            self.SetImage(doc,'user');
         });
         return userSchema;
     };

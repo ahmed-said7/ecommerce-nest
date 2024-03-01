@@ -29,7 +29,7 @@ import { Models } from "src/enums/models.enum";
             }
         ])
         ,apiModule],
-    providers:[BrandServices],
+    providers:[BrandServices,{provide:"folder",useValue:"brand"}],
     controllers:[BrandController]
 })
 export class BrandModule implements NestModule {

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, UseGuards, UseInterceptors } from "@nestjs/common";
 import { User } from "src/decorator/user.decorator";
 import { UserDoc } from "../user.entity";
 import { ObjectId } from "mongoose";
@@ -6,8 +6,11 @@ import { AuthorizationGuard } from "src/guards/user.guard";
 import { Roles } from "src/decorator/roles.decorator";
 import { AddressServices } from "./adress.service";
 import { CreateAddressDto } from "../dto/address.dto";
+import { UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 
 @Controller('address')
+@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(UserSerializerInterceptor)
 export class addressController {
     constructor(private addressService: AddressServices){};
     @Post()

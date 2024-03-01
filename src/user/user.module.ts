@@ -1,4 +1,4 @@
-import {  MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
+import {  ClassSerializerInterceptor, MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AuthContoller} from "./auth/auth.controller";
 import { AuthServices} from "./auth/auth.service";
@@ -15,6 +15,8 @@ import { WishlistServices } from "./wishlist/wishlist.service";
 import { AddressServices } from "./address/adress.service";
 import { WishlistController } from "./wishlist/wishlist.controller";
 import { addressController } from "./address/address.controller";
+import { APP_INTERCEPTOR } from "@nestjs/core";
+import { UserSerializerInterceptor } from "./interceptor/user.serialize.interceptor";
 
 
 @Module({
@@ -30,7 +32,8 @@ import { addressController } from "./address/address.controller";
         },inject:[SchemaDefinition]
     }]) , apiModule , NodemailerModule ],
     controllers:[AuthContoller,UserContoller,LoggedContoller,WishlistController,addressController],
-    providers:[AuthServices,UserServices,LoggedUserServices,WishlistServices,AddressServices]
+    providers:[AuthServices,{provide:"folder",useValue:"user"}
+    ,UserServices,LoggedUserServices,WishlistServices,AddressServices]
 })
 
 

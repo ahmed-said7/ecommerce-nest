@@ -1,4 +1,4 @@
-import { Body, Controller,Delete,Get,Patch, UploadedFile, UseGuards, UseInterceptors} from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller,Delete,Get,Patch, UploadedFile, UseGuards, UseInterceptors} from "@nestjs/common";
 import { UpdateUserDto } from "../dto/update.user.dto";
 import { LoggedUserServices } from "./logged.services";
 import { User } from "src/decorator/user.decorator";
@@ -9,8 +9,10 @@ import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { fileValidationPipe } from "../validator/upload.pipe";
+import { FileInterceptorImage } from "src/interceptors/file.interceptor";
 
 @Controller('logged')
+@UseInterceptors(ClassSerializerInterceptor)
 @UseInterceptors(UserSerializerInterceptor)
 
 export class LoggedContoller {
@@ -25,7 +27,9 @@ export class LoggedContoller {
     };
 
     @Patch('')
+    
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin','user','manager'])
     @UseGuards(AuthorizationGuard)
     updateLoggedUser(@User() user : UserDoc,@Body() body :UpdateUserDto,@UploadedFile(fileValidationPipe) image?:string ){

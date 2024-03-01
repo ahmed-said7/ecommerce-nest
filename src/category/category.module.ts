@@ -25,7 +25,7 @@ import { Models } from "src/enums/models.enum";
             },inject:[SchemaDefinition]
         }
     ]),apiModule],
-    providers:[CategoryServices],
+    providers:[CategoryServices,{provide:'folder',useValue:"category"}],
     controllers:[CategoryController]
 })
 

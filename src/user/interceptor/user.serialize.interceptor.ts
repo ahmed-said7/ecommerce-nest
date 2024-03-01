@@ -1,29 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import {UserDoc} from "../user.entity"
-import { GeTAllSerializerInterceptor, SerializerInterceptor } from 'src/interceptors/serializer.interceptor';
+import {  SerializerInterceptor } from 'src/interceptors/serializer.interceptor';
+import { Exclude, Expose, Transform } from 'class-transformer';
+import { Pagination } from 'src/utils/api.features';
 
-
-const fields=["passwordChangedAt","passwordResetCode"
-                ,"passwordResetCodeExpires","passwordResetCodeVertified","password","__v","updatedAt"]
-
-@Injectable()
-export class UserSerializerInterceptor extends SerializerInterceptor<UserDoc>{
-    serialize(val: {user: UserDoc}) {
-        // @ts-ignore
-        const obj={... val.user._doc };
-        fields.forEach((field)=>{delete obj[field]});
-        return {user:obj};
+class UserEntity {
+    name:string;
+    email:string;
+    role:string;
+    image:string;
+    active:boolean;
+    @Exclude()
+    passwordResetCodeVertified?:boolean;
+    @Exclude()
+    passwordChangedAt:Date;
+    @Exclude()
+    passwordResetCode:string;
+    @Exclude()
+    passwordResetCodeExpires:Date;
+    @Exclude()
+    updatedAt:Date;
+    @Exclude()
+    createdAt:Date;
+    @Exclude()
+    __v:number;
+    @Transform(({value})=>{return undefined})
+    password:string;
+    constructor(partial:Partial<UserEntity>){
+        Object.assign(this, partial);
     };
 };
 
 @Injectable()
-export class GeTAllUserSerializerInterceptor extends GeTAllSerializerInterceptor<UserDoc> {
-    serialize(data: UserDoc[]) {
-        return data.map( (value) =>{
-            // @ts-ignore
-            const obj={... value._doc };
-            fields.forEach((field)=>{delete obj[field]});
-            return obj;
-        });
+export class UserSerializerInterceptor extends SerializerInterceptor<UserDoc>{
+    serialize(val: any ) {
+        if( val.user ){
+            const doc= new UserEntity(val.user._doc);
+            return { ... val ,  user: doc };
+        } else if ( val.data ){
+            const docs=val.data.map(( doc )=> new UserEntity(doc._doc));
+            return { ... val , data: docs };
+        }else {
+            return val;
+        };
     };
-}
+};
+

@@ -1,7 +1,6 @@
 import * as mongoose  from "mongoose";
 
 export const userSchema = new mongoose.Schema({
-
     email:{type:String,required:true,unique:true,trim:true},
     name:{type:String,required:true,trim:true},
     password:{type:String,required:true,trim:true},
@@ -10,6 +9,7 @@ export const userSchema = new mongoose.Schema({
     passwordResetCode:String,
     passwordResetCodeExpires:Date,
     passwordResetCodeVertified:Boolean,
+    googleAuth:{type:Boolean,default:false},
     active:{type:Boolean,default:true},
     address:[{
         street:String,
@@ -20,12 +20,12 @@ export const userSchema = new mongoose.Schema({
     }],
     image:String,
     wishlist:[{type:mongoose.Types.ObjectId,ref:"Product"}]
-    
     },{ timestamps:true }); 
 
 
 
 export interface UserDoc extends mongoose.Document {
+    googleAuth: boolean ;
     name:string;
     email:string;
     password:string;

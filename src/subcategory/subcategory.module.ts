@@ -24,7 +24,8 @@ import { SchemaDefinition} from "src/schemaDefinitions/schema.definition";
                     return schema.subcategory();
                 },inject:[SchemaDefinition]  }
             ])],
-    providers:[SubcategoryServices] , controllers:[SubcategoryController]
+    providers:[SubcategoryServices,{provide:"folder",useValue:"subcategory"}]
+    , controllers:[SubcategoryController]
 })
 
 

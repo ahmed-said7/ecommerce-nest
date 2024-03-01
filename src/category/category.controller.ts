@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post,
+import { Body,Controller, Delete, Get, Param, Patch, Post,
         Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 
 import { CategoryServices } from "./category.services";
@@ -11,6 +11,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { fileValidationPipe as subValidationPipe } from "src/subcategory/pipe/file.pipe";
+import { FileInterceptorImage } from "src/interceptors/file.interceptor";
 
 @Controller('category')
 export class CategoryController {
@@ -31,6 +32,7 @@ export class CategoryController {
     
     @Patch(':id')
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager'])
     @UseGuards(AuthorizationGuard)
     updateCat(
@@ -50,6 +52,7 @@ export class CategoryController {
 
     @Post()
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager'])
     @UseGuards(AuthorizationGuard)
     createCat(@Body() body:CreateCategoryDto,
@@ -66,6 +69,7 @@ export class CategoryController {
 
     @Post(':id/subcategory')
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin', 'manager','user'])
     @UseGuards(AuthorizationGuard)
     createSub(@Query('id') category:ObjectId,@Body('name') name:string, 

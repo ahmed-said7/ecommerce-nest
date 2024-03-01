@@ -8,6 +8,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { fileValidationPipe } from "./pipe/file.pipe";
 import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
+import { FileInterceptorImage } from "src/interceptors/file.interceptor";
 
 
 
@@ -33,6 +34,7 @@ export class SubcategoryController {
 
     @Patch(':id')
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin','manager'])
     @UseGuards(AuthorizationGuard)
     updateSub(
@@ -51,6 +53,7 @@ export class SubcategoryController {
 
     @Post()
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(['admin','manager'])
     @UseGuards(AuthorizationGuard)
     createSub(@Body() body:CreateSubcategoryDto,@UploadedFile(fileValidationPipe) image?:string){

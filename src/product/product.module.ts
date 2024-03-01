@@ -35,7 +35,7 @@ import { Models } from "src/enums/models.enum";
                 inject:[SchemaDefinition]},
             ])
             ,apiModule],
-    providers:[ProductServices],
+    providers:[ProductServices,{provide:"folder",useValue:"product"}],
     controllers:[ProductController]
 })
 export class ProductModule implements NestModule {

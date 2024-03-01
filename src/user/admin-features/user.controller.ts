@@ -1,29 +1,25 @@
-import { Body, Controller,Delete,Get,Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors} from "@nestjs/common";
-import { AuthServices } from "../auth/auth.service";
+import { Body, ClassSerializerInterceptor, Controller,Delete,Get,Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors} from "@nestjs/common";
 import { CreateUserDto } from "../dto/create.user.dto";
-import { LoginUserDto } from "../dto/login.user.dto";
-
-import { changePasswordDto } from "../dto/password.dto";
 import { UserServices, queryInterface } from "./user.service";
 import { ObjectId } from "mongoose";
 import { UpdateUserDto } from "../dto/update.user.dto";
-import { GeTAllUserSerializerInterceptor, UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { Roles } from "src/decorator/roles.decorator";
 import { fileValidationPipe } from "../validator/upload.pipe";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { FileInterceptorImage } from "src/interceptors/file.interceptor";
+import { UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 
 
 @Controller('user')
-
-// @UseInterceptors(UserSerializerInterceptor)
-// @UseInterceptors(ProtectInterceptor)
+@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(UserSerializerInterceptor)
 export class UserContoller {
     constructor(private userServices:UserServices){};
     
     @Post()
-    @UseInterceptors(UserSerializerInterceptor)
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(["admin","user"])
     @UseGuards(AuthorizationGuard)
     createUser(@Body() body : CreateUserDto , @UploadedFile(fileValidationPipe) image?:string ){
@@ -31,7 +27,6 @@ export class UserContoller {
     };
 
     @Get(':id')
-    @UseInterceptors(UserSerializerInterceptor)
     @Roles(["admin","user"])
     @UseGuards(AuthorizationGuard)
     getUser(@Param('id') id : ObjectId ){
@@ -39,8 +34,6 @@ export class UserContoller {
     };
 
     @Get('')
-    // @UseGuards(new AuthorizationGuard(["admin","user"]))
-    @UseInterceptors(GeTAllUserSerializerInterceptor)
     @Roles(["admin","user"])
     @UseGuards(AuthorizationGuard)
     getAll(@Query() query:queryInterface){
@@ -48,8 +41,8 @@ export class UserContoller {
     };
 
     @Patch(':id')
-    @UseInterceptors(UserSerializerInterceptor)
     @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptorImage)
     @Roles(["admin","user"])
     @UseGuards(AuthorizationGuard)
     uptdateUser(@Param('id') id : ObjectId,@Body() body:UpdateUserDto
@@ -60,7 +53,6 @@ export class UserContoller {
     @Delete(':id')
     @Roles(["admin","user"])
     @UseGuards(AuthorizationGuard)
-    @UseInterceptors(UserSerializerInterceptor)
     deleteUser(@Param('id') id : ObjectId ){
         return this.userServices.deleteUser(id);
     };

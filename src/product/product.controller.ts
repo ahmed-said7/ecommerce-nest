@@ -11,6 +11,7 @@ import { Roles } from "src/decorator/roles.decorator";
 import { AuthorizationGuard } from "src/guards/user.guard";
 import { User } from "src/decorator/user.decorator";
 import { UserDoc } from "src/user/user.entity";
+import { FileInterceptorProductImage } from "src/interceptors/file.product.interceptor";
 
 
 
@@ -36,6 +37,7 @@ export class ProductController {
 
     @Patch(':id')
     @UseInterceptors(FileFieldsInterceptor([{name:"images",maxCount:7},{name:"imageCover",maxCount:1}]))
+    @UseInterceptors(FileInterceptorProductImage)
     @Roles(['admin','manager'])
     @UseGuards(AuthorizationGuard)
     updateSub(
@@ -54,6 +56,7 @@ export class ProductController {
 
     @Post()
     @UseInterceptors(FileFieldsInterceptor([{name:"images",maxCount:7},{name:"imageCover",maxCount:1}]))
+    @UseInterceptors(FileInterceptorProductImage)
     @Roles(['admin','manager'])
     @UseGuards(AuthorizationGuard)
     createSub(

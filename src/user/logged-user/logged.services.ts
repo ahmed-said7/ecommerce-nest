@@ -21,7 +21,6 @@ interface updateLoggedUserPassword {
 };
 
 @Injectable()
-@UseInterceptors(UserSerializerInterceptor)
 export class LoggedUserServices {
     constructor(@InjectModel(Models.USER) private model:Model<UserDoc>){};
     getLoggedUser(user:UserDoc){
