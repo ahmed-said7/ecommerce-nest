@@ -9,26 +9,27 @@ import { UserContoller } from "./admin-features/user.controller";
 import { UserServices } from "./admin-features/user.service";
 import { LoggedUserServices } from "./logged-user/logged.services";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
-import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/schema.definition";
 import { Models } from "src/enums/models.enum";
 import { WishlistServices } from "./wishlist/wishlist.service";
 import { AddressServices } from "./address/adress.service";
 import { WishlistController } from "./wishlist/wishlist.controller";
 import { addressController } from "./address/address.controller";
-import { productSchema } from "src/product/product.entity";
+import { InitializeProductSchema, InitializedProductSchemaModule } from "src/product/product.entity";
+import { InitializedUserSchema, InitializedUserSchemaModule } from "./user.entity";
 
 
 @Module({
-    imports:[SchemaDefinitionModule,MongooseModule.forFeatureAsync([{
+    imports:[InitializedUserSchemaModule,InitializedProductSchemaModule,
+        MongooseModule.forFeatureAsync([{
         name:Models.USER,
-        useFactory:function(schema:SchemaDefinition) {
-            return schema.user();
-        },inject:[SchemaDefinition]
+        useFactory:function(schema:InitializedUserSchema) {
+            return schema.user;
+        },inject:[InitializedUserSchema]
     },{
         name:Models.PRODUCT,
-        useFactory:function() {
-            return productSchema;
-        }
+        useFactory:function(schema:InitializeProductSchema) {
+            return schema.product;
+        },inject:[InitializeProductSchema]
     }]) , apiModule , NodemailerModule ],
     controllers:[AuthContoller,UserContoller,LoggedContoller,WishlistController,addressController],
     providers:[AuthServices,{provide:"folder",useValue:"user"}

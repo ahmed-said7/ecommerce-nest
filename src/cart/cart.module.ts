@@ -2,41 +2,42 @@ import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { apiModule } from "src/utils/api";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
-import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
 import { CartServices } from "./cart.service";
 import { CartController } from "./cart.controller";
 import { Models } from "src/enums/models.enum";
-import { productSchema } from "src/product/product.entity";
-import { userSchema } from "src/user/user.entity";
+import { InitializeProductSchema, InitializedProductSchemaModule } from "src/product/product.entity";
+import { InitializedUserSchema, InitializedUserSchemaModule } from "src/user/user.entity";
 import { couponSchema } from "src/coupon/coupon.entity";
+import { cartSchema } from "./cart.entity";
 
 
 @Module({
     imports:
-    [SchemaDefinitionModule,MongooseModule.forFeatureAsync([
+    [InitializedProductSchemaModule,InitializedUserSchemaModule,
+        MongooseModule.forFeatureAsync([
         {
             name:Models.PRODUCT
-            ,useFactory:function(){
-                return productSchema;
-            },inject:[SchemaDefinition]
+            ,useFactory:function(schema:InitializeProductSchema){
+                return schema.product;
+            },inject:[InitializeProductSchema]
         },
         {
             name:Models.USER,
-            useFactory:function(){
-                return userSchema;
-            },inject:[SchemaDefinition]
+            useFactory:function(schema:InitializedUserSchema){
+                return schema.user;
+            },inject:[InitializedUserSchema]
         },
         {
             name:Models.CART,
-            useFactory:function(schema:SchemaDefinition){
-                return schema.cart();
-            },inject:[SchemaDefinition]
+            useFactory:function(){
+                return cartSchema;
+            }
         },
         {
             name:Models.COUPON,
             useFactory:function(){
                 return couponSchema;
-            },inject:[SchemaDefinition]
+            }
         }
     ]),apiModule],
     providers:[CartServices],

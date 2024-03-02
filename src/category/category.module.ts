@@ -4,29 +4,31 @@ import { CategoryServices } from "./category.services";
 import { CategoryController } from "./category.controller";
 import { apiModule } from "src/utils/api";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
-import { SchemaDefinitionModule,SchemaDefinition } from "src/schemaDefinitions/schema.definition";
 import { SubcategoryModule } from "src/subcategory/subcategory.module";
 import { Models } from "src/enums/models.enum";
-import { userSchema } from "src/user/user.entity";
+import { InitializedUserSchema, InitializedUserSchemaModule, userSchema } from "src/user/user.entity";
+import { InitializedCategorySchema, InitializedCategorySchemaModule, categorySchema } from "./category.entity";
 
 
 @Module({
     imports:
-    [SubcategoryModule,SchemaDefinitionModule,MongooseModule.forFeatureAsync([
+    [SubcategoryModule,InitializedUserSchemaModule,InitializedCategorySchemaModule,
+        MongooseModule.forFeatureAsync([
         {
             name:Models.CATEGOY
-            ,useFactory:function(schema:SchemaDefinition){
-                return schema.category();
-            },inject:[SchemaDefinition]
+            ,useFactory:function(schema:InitializedCategorySchema){
+                return schema.category;
+            },inject:[InitializedCategorySchema]
         },
         {
             name:Models.USER,
-            useFactory:function(){
-                return userSchema;
-            },inject:[SchemaDefinition]
+            useFactory:function(schema:InitializedUserSchema){
+                return schema.user;
+            },inject:[InitializedUserSchema]
         }
     ]),apiModule],
-    providers:[CategoryServices,{provide:'folder',useValue:"category"}],
+    providers:[CategoryServices,
+        {provide:'folder',useValue:"category"}],
     controllers:[CategoryController]
 })
 

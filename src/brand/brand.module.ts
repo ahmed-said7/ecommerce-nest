@@ -4,33 +4,34 @@ import { BrandServices } from "./brand.services";
 import { BrandController } from "./brand.controller";
 import { apiModule } from "src/utils/api";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
-import { SchemaDefinition, SchemaDefinitionModule } from "src/schemaDefinitions/schema.definition";
 import { Models } from "src/enums/models.enum";
-import { userSchema } from "src/user/user.entity";
+import { InitializedUserSchema, InitializedUserSchemaModule } from "src/user/user.entity";
+import { InitializedBrandSchema, InitializedBrandSchemaModule } from "./brand.entity";
 
 
 
 
 @Module({
     imports:[
-        SchemaDefinitionModule,
         MongooseModule.forFeatureAsync
         ([
             {
-                name:Models.BRAND,useFactory:function(schema:SchemaDefinition){
-                    return schema.brand();
+                name:Models.BRAND,useFactory:function(schema:InitializedBrandSchema){
+                    return schema.brand;
                 }
-                ,inject:[SchemaDefinition]
+                ,inject:[InitializedBrandSchema]
             },
             {
-                name:Models.USER,useFactory:function(){
-                    return userSchema;
+                name:Models.USER,useFactory:function(schema:InitializedUserSchema){
+                    return schema.user;
                 }
-                ,inject:[SchemaDefinition]
+                ,inject:[InitializedUserSchema]
             }
         ])
-        ,apiModule],
-    providers:[BrandServices,{provide:"folder",useValue:"brand"}],
+        ,apiModule,
+        InitializedBrandSchemaModule,InitializedUserSchemaModule],
+    providers:[
+        BrandServices,{provide:"folder",useValue:"brand"}],
     controllers:[BrandController]
 })
 export class BrandModule implements NestModule {

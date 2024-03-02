@@ -13,11 +13,13 @@ import { CartModule } from './cart/cart.module';
 import { CouponModule } from './coupon/coupon.module';
 import { SubcategoryModule } from './subcategory/subcategory.module';
 import { OrderModule } from './order/order.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 // import { OrderModule } from './order/order.module';
 // OrderModule
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot({global:true}),
     ConfigModule.forRoot({isGlobal:true,envFilePath:"src/.env"}),
     MongooseModule.forRootAsync({
       imports:[ConfigModule],

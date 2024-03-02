@@ -1,4 +1,6 @@
-import mongoose, { ObjectId } from 'mongoose';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import mongoose, { Schema } from "mongoose";
 export const name="Cart";
 export const cartSchema = new mongoose.Schema({
     cartItems: [{
@@ -22,6 +24,7 @@ export const cartSchema = new mongoose.Schema({
 },
     { timestamps: true }
 );
+
 
 export interface CartDoc extends mongoose.Document {
     cartItems: {

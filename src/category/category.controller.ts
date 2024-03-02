@@ -69,6 +69,6 @@ export class CategoryController {
     @Roles(['admin', 'manager','user'])
     @UseGuards(AuthorizationGuard)
     createSub(@Query('id') category:ObjectId,@Body() body:CreateSubcategoryDto ){
-        return this.categoryService.createSubcategory(body);
+        return this.categoryService.createSubcategory({... body,category});
     };
 };

@@ -1,4 +1,7 @@
-import mongoose from "mongoose";
+import { Global, Injectable, Module} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import mongoose, { Schema } from "mongoose";
+import { Query } from "mongoose";
 
 export const productSchema = new mongoose.Schema({
     title: {
@@ -86,3 +89,34 @@ export interface ProductDoc extends mongoose.Document {
     ratingAverage: number;
     ratingQuantity: number;
 };
+
+@Injectable()
+export class InitializeProductSchema {
+    product:Schema;
+    constructor( private config : ConfigService ){
+        const self=this;
+        productSchema.pre<Query<ProductDoc[]|ProductDoc,ProductDoc>>(/^find/ig,function(){
+            this
+                .populate({ path:"brand",select:"name image -_id" })
+                .populate({ path:"category",select:"name image -_id" });
+        });
+        productSchema.post<ProductDoc>('init',function(doc){
+            if(doc.imageCover){
+                doc.imageCover=`${self.config.get<string>('root_url')}/product/${doc.imageCover}`;
+            };
+            if(doc.images){
+                const images = [];
+                doc.images.forEach ( ( img:string ) => { 
+                    images.push(`${self.config.get<string>('root_url')}/product/${img}`)
+                });
+                doc.images=images;
+            };
+        });
+        this.product=productSchema;
+    };
+};
+
+
+@Global()
+@Module({providers:[InitializeProductSchema],exports:[InitializeProductSchema]})
+export class InitializedProductSchemaModule{};

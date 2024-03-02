@@ -1,30 +1,44 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { name as subName } from "./subcategory.entity";
 import { SubcategoryController } from "./subcategory.controller";
 import { SubcategoryServices } from "./subcategory.service";
-import { name as catName, categorySchema } from "src/category/category.entity";
 import { apiModule } from "src/utils/api";
-import {  name as userName, userSchema } from "src/user/user.entity";
 import { ProtectMiddleware } from "src/middlewares/protect.middleware";
-import { SchemaDefinition} from "src/schemaDefinitions/schema.definition";
+import { Models } from "src/enums/models.enum";
+import { InitializedCategorySchema, InitializedCategorySchemaModule } from "src/category/category.entity";
+import { InitializedUserSchema, InitializedUserSchemaModule } from "src/user/user.entity";
+import { InitializedSubcategorySchema, InitializedSubcategorySchemaModule } from "./subcategory.entity";
 
 
 @Module({
     exports:[SubcategoryServices],
     imports:
-    [apiModule, MongooseModule.forFeatureAsync( [ 
-                {name:userName,useFactory:function() {
-                    return userSchema;
-                } },
-                {name:catName,useFactory:function(schema:SchemaDefinition) {
-                    return categorySchema;
-                } },
-                {name:subName,useFactory:function(schema:SchemaDefinition) {
-                    return schema.subcategory();
-                },inject:[SchemaDefinition]  }
-            ])],
-    providers:[SubcategoryServices,{provide:"folder",useValue:"subcategory"}]
+    [   
+        InitializedCategorySchemaModule,InitializedUserSchemaModule,
+        InitializedSubcategorySchemaModule,
+        apiModule, 
+        MongooseModule.forFeatureAsync( [ 
+            {
+                name:Models.USER,
+                useFactory:function(schema:InitializedUserSchema){
+                    return schema.user;
+                },inject:[InitializedUserSchema]
+            },
+            {
+                name:Models.CATEGOY,
+                useFactory
+                :function(schema:InitializedCategorySchema){return schema.category},
+                inject:[InitializedCategorySchema]
+            },
+                {
+                    name:Models.SUBCATEGORY,
+                    useFactory:function(schema:InitializedSubcategorySchema){
+                    return schema.subcategory; }
+                    ,inject:[InitializedSubcategorySchema]
+                }
+            ])
+        ],
+    providers:[{provide:"folder",useValue:"subcategory"},SubcategoryServices]
     , controllers:[SubcategoryController]
 })
 

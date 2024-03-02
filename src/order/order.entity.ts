@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+import { Global, Injectable, Module} from "@nestjs/common";
+import mongoose, { Schema } from "mongoose";
+import { Query } from "mongoose";
 export const name='Order';
 
 export const orderSchema = new mongoose.Schema(
@@ -85,3 +87,19 @@ export interface OrderDoc extends mongoose.Document {
     isDelivered: boolean
     deliveredAt: Date,
 };
+
+@Injectable()
+export class InitializedOrderSchema {
+    order:Schema;
+    constructor(){
+        orderSchema.pre< Query < OrderDoc[] | OrderDoc , OrderDoc > >(/^find/,function(){
+            this.populate({path:"cartItems.product",select:"title imageCover"})
+            .populate({path:"user",select:"name image address"});
+        });
+        this.order=orderSchema;
+    };
+};
+
+@Global()
+@Module({providers:[InitializedOrderSchema],exports:[InitializedOrderSchema]})
+export class InitializedOrderSchemaModule{};

@@ -1,4 +1,7 @@
-import * as mongoose  from "mongoose";
+import { Global, Injectable, Module} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import mongoose, { Schema } from "mongoose";
+import * as bcrypt from "bcryptjs"; 
 
 export const userSchema = new mongoose.Schema({
     email:{type:String,required:true,unique:true,trim:true},
@@ -45,5 +48,28 @@ export interface UserDoc extends mongoose.Document {
     }[],
     wishlist: mongoose.ObjectId[]
 };
+
+@Injectable()
+export class InitializedUserSchema {
+    user:Schema;
+    constructor(private config:ConfigService){
+        const self = this;
+        userSchema.pre('save',async function(next){
+            if( this.isModified('password') ){
+                this.password=await bcrypt.hash(this.password,10);
+            };
+            return next()
+        });
+        userSchema.post<UserDoc>('init',function(doc){
+            const image=doc.image;
+            doc.image=`${self.config.get<string>('root_url')}/subcategory/${image}`;
+        });
+        this.user=userSchema;
+    };
+};
+
+@Global()
+@Module({providers:[InitializedUserSchema],exports:[InitializedUserSchema]})
+export class InitializedUserSchemaModule{};
 
 export const name='User';
