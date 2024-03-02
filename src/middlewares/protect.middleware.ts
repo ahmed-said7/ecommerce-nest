@@ -33,6 +33,9 @@ export class ProtectMiddleware implements NestMiddleware {
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token=req.headers.authorization.split(' ')[1];
         };
+        if(! token && req.isAuthenticated()){
+            return next();
+        }
         if( !token ){
             throw new HttpException('user not authenticated , provide token',400);
         };

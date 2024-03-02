@@ -6,7 +6,7 @@ import * as bcrypt from "bcryptjs";
 export const userSchema = new mongoose.Schema({
     email:{type:String,required:true,unique:true,trim:true},
     name:{type:String,required:true,trim:true},
-    password:{type:String,required:true,trim:true},
+    password:{type:String,trim:true},
     role:{type:String,enum:['admin','user','manager'],default:"user"},
     passwordChangedAt:Date,
     passwordResetCode:String,

@@ -10,8 +10,8 @@ import { UserSerializerInterceptor } from "../interceptor/user.serialize.interce
 
 
 @Controller('auth')
-@UseInterceptors(ClassSerializerInterceptor)
-@UseInterceptors(UserSerializerInterceptor)
+// @UseInterceptors(ClassSerializerInterceptor)
+// @UseInterceptors(UserSerializerInterceptor)
 export class AuthContoller {
     constructor(private authServices:AuthServices){};
     @Post('signup')

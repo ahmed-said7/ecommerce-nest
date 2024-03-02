@@ -12,8 +12,8 @@ import { fileValidationPipe } from "../validator/upload.pipe";
 import { FileInterceptorImage } from "src/interceptors/file.interceptor";
 
 @Controller('logged')
-@UseInterceptors(ClassSerializerInterceptor)
-@UseInterceptors(UserSerializerInterceptor)
+// @UseInterceptors(ClassSerializerInterceptor)
+// @UseInterceptors(UserSerializerInterceptor)
 
 export class LoggedContoller {
     constructor(private loggedServices:LoggedUserServices){};

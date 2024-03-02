@@ -1,5 +1,5 @@
 
-import { Module, forwardRef } from '@nestjs/common';
+import { Module, forwardRef,NestModule,MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from "@nestjs/mongoose";
@@ -14,6 +14,8 @@ import { CouponModule } from './coupon/coupon.module';
 import { SubcategoryModule } from './subcategory/subcategory.module';
 import { OrderModule } from './order/order.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { StrategyModule } from './strategy/strategy.module';
+import { PassportModule } from '@nestjs/passport';
 // import { OrderModule } from './order/order.module';
 // OrderModule
 
@@ -31,9 +33,12 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     UserModule,OrderModule
     ,BrandModule,CartModule,CouponModule,
     CategoryModule,
-    ProductModule,ReviewModule
+    ProductModule,ReviewModule,StrategyModule,
+    PassportModule.register({session:true})
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule{
+  
+}

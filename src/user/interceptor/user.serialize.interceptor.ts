@@ -3,8 +3,11 @@ import {UserDoc} from "../user.entity"
 import {  SerializerInterceptor } from 'src/interceptors/serializer.interceptor';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { Pagination } from 'src/utils/api.features';
+import { ObjectId } from 'mongoose';
 
 class UserEntity {
+    @Transform(({value})=> value._id.toString() )
+    _id:string;
     name:string;
     email:string;
     role:string;

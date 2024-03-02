@@ -8,6 +8,7 @@ import { SubcategoryModule } from "src/subcategory/subcategory.module";
 import { Models } from "src/enums/models.enum";
 import { InitializedUserSchema, InitializedUserSchemaModule, userSchema } from "src/user/user.entity";
 import { InitializedCategorySchema, InitializedCategorySchemaModule, categorySchema } from "./category.entity";
+import { StrategyModule } from "src/strategy/strategy.module";
 
 
 @Module({
@@ -26,7 +27,7 @@ import { InitializedCategorySchema, InitializedCategorySchemaModule, categorySch
                 return schema.user;
             },inject:[InitializedUserSchema]
         }
-    ]),apiModule],
+    ]),apiModule,StrategyModule],
     providers:[CategoryServices,
         {provide:'folder',useValue:"category"}],
     controllers:[CategoryController]
