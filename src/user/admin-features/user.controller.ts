@@ -12,8 +12,6 @@ import { UserSerializerInterceptor } from "../interceptor/user.serialize.interce
 
 
 @Controller('user')
-// @UseInterceptors(ClassSerializerInterceptor)
-// @UseInterceptors(UserSerializerInterceptor)
 export class UserContoller {
     constructor(private userServices:UserServices){};
     

@@ -33,8 +33,10 @@ export class InitializedSubcategorySchema {
             this.populate({ path:"category",select:"name image -_id"  });
         });
         subcategorySchema.post<SubcategoryDoc>('init',function(doc){
-            const image=doc.image;
-            doc.image=`${self.config.get<string>('root_url')}/subcategory/${image}`;
+            if(doc.image){
+                const image=doc.image;
+                doc.image=`${self.config.get<string>('root_url')}/subcategory/${image}`;
+            }
         });
         this.subcategory=subcategorySchema;
     };

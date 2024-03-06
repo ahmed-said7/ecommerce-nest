@@ -3,8 +3,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { UserDoc} from "../user.entity";
 import { Model} from "mongoose";
 import * as bcrypt from "bcryptjs";
-import { UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 import { Models } from "src/enums/models.enum";
+import { Request } from "express";
 
 
 interface updateLoggedUser {
@@ -41,7 +41,7 @@ export class LoggedUserServices {
         let user=await this.model.findByIdAndUpdate(_id,{active:false},{new:true});
         return {user};
     };
-    async updateLoggedUserPassword(user:UserDoc,body:updateLoggedUserPassword){
+    async updateLoggedUserPassword(user:UserDoc,body:updateLoggedUserPassword,req:Request){
         if(body.password !== body.passwordConfirm){
             throw new HttpException('password mismatch',400);
         };
@@ -49,6 +49,7 @@ export class LoggedUserServices {
         if(! valid){
             throw new HttpException('password is not correct',400);
         }
+        req.session=null;
         user.password = body.password;
         user.passwordChangedAt=new Date();
         await user.save();

@@ -25,8 +25,10 @@ export class InitializedBrandSchema {
     constructor(private config:ConfigService){
         const self=this;
         brandSchema.post<BrandDoc>('init',function(doc){
-            const image=doc.image;
-            doc.image=`${self.config.get<string>('root_url')}/category/${image}`;
+            if(doc.image){
+                const image=doc.image;
+                doc.image=`${self.config.get<string>('root_url')}/brand/${image}`;
+            }
         });
         this.brand=brandSchema;
     };

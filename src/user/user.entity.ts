@@ -8,6 +8,9 @@ export const userSchema = new mongoose.Schema({
     name:{type:String,required:true,trim:true},
     password:{type:String,trim:true},
     role:{type:String,enum:['admin','user','manager'],default:"user"},
+    emailVertified:{type:Boolean,default:false},
+    emailVerifiedExpired:Date,
+    emailVerifiedCode:String,
     passwordChangedAt:Date,
     passwordResetCode:String,
     passwordResetCodeExpires:Date,
@@ -45,8 +48,11 @@ export interface UserDoc extends mongoose.Document {
         phone:string,
         city:string,
         details:string
-    }[],
-    wishlist: mongoose.ObjectId[]
+    }[];
+    wishlist: mongoose.ObjectId[];
+    emailVertified:boolean;
+    emailVerifiedExpired:Date;
+    emailVerifiedCode:string;
 };
 
 @Injectable()
@@ -61,8 +67,10 @@ export class InitializedUserSchema {
             return next()
         });
         userSchema.post<UserDoc>('init',function(doc){
-            const image=doc.image;
-            doc.image=`${self.config.get<string>('root_url')}/subcategory/${image}`;
+            if(doc.image){
+                const image=doc.image;
+                doc.image=`${self.config.get<string>('root_url')}/user/${image}`;
+            }
         });
         this.user=userSchema;
     };

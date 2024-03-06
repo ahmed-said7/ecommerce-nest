@@ -1,0 +1,24 @@
+version: "3"
+services:
+  nest-srv:
+    build: .
+    volumes:
+      - ./src:/app/src:ro
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./src/.env
+    environment:
+      - Node_Env=development
+    depends_on:
+      - mongo-srv
+  mongo-srv:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo-db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME:root
+      - MONGO_INITDB_ROOT_PASSWORD:example
+volumes:
+  mongo-db:

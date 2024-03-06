@@ -1,6 +1,6 @@
 import { Injectable, HttpException, Param, ConfigurableModuleBuilder} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { UserDoc, name } from "../user.entity";
+import { UserDoc } from "../user.entity";
 import { Model, ObjectId } from "mongoose";
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcryptjs";
@@ -49,6 +49,7 @@ export class AuthServices {
         if(! user ){
             throw new HttpException('can not create user',400);
         };
+        await this.emailVerification(user);
         const token=this.createToken(user._id);
         return {token};
     };
@@ -69,7 +70,31 @@ export class AuthServices {
         const token=this.createToken(user._id);
         return { token };
     };
-    
+
+    async createEmailVerificationCode( email:string ){
+        const user=await this.model.findOne({email});
+        if( ! user ){
+            throw new HttpException('user not exists',400);
+        };
+        await this.emailVerification(user);
+        return {status:"code sent"};
+    };
+
+    async vertifyEmail(code:string){
+        const hash=this.createHash(code);
+        const user=await this.model.findOne({
+            emailVerifiedCode:hash,emailVerifiedExpired:{$gt:Date.now()}
+        });
+        if(!user){
+            throw new HttpException('email Verified Code expired',400);
+        };
+        user.emailVerifiedCode=undefined;
+        user.emailVerifiedExpired=undefined;
+        user.emailVertified=true;
+        await user.save();
+        return {status:"vertified"};
+    };
+
     async forgetPassword(email:string){
         let user=await this.model.findOne({ email });
         if(! user ){
@@ -124,7 +149,21 @@ export class AuthServices {
         await user.save();
         return {user};
     }
-
+    private async emailVerification(user:UserDoc){
+        const code=this.nodemailerService.resetCode();
+        console.log(code);
+        user.emailVerifiedCode=this.createHash(code);
+        user.emailVerifiedExpired=new Date( Date.now() + 5 * 60 * 1000 );
+        try{
+            await this.nodemailerService.sendWelcome({email:user.email,resetCode:code});
+        }catch(err){
+            user.emailVerifiedCode=undefined;
+            user.emailVerifiedExpired=undefined;
+            await user.save();
+            throw err;
+        };
+        await user.save();
+    };
 
     private createToken(userId:ObjectId){
         const token = jwt.sign({userId},this.config.get<string>('jwt_secret'),{expiresIn:"30d"});

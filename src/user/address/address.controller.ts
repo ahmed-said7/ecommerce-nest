@@ -9,8 +9,6 @@ import { CreateAddressDto } from "../dto/address.dto";
 import { UserSerializerInterceptor } from "../interceptor/user.serialize.interceptor";
 
 @Controller('address')
-@UseInterceptors(ClassSerializerInterceptor)
-@UseInterceptors(UserSerializerInterceptor)
 export class addressController {
     constructor(private addressService: AddressServices){};
     @Post()

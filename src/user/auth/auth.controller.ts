@@ -36,8 +36,12 @@ export class AuthContoller {
         return this.authServices.changePassword(body);
     };
 
-    @Post(':code')
+    @Post('reset-password/:code')
     getOne(@Param('code') code:string){
         return this.authServices.vertifyResetCode(code);
+    };
+    @Post('vertify-email/:code')
+    sendEmailVertification(@Param('code') code:string){
+        return this.authServices.vertifyEmail(code);
     };
 };

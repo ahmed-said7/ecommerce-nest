@@ -21,11 +21,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     async validate(access:string,refresh:string,profile:any ){
         const { name, email,picture:image } = profile._json;
         const googleAuth=true;
+        const emailVertified=true;
         let user=await this.userModel.findOne({email});
         if(user){
             return user;
         }
-        user=await this.userModel.create({name,email,image,googleAuth});
+        user=await this.userModel.create({emailVertified,name,email,image,googleAuth});
         return user;
     }
 }

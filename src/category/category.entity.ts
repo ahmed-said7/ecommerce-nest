@@ -24,8 +24,10 @@ export class InitializedCategorySchema {
     constructor(private config:ConfigService){
         const self=this;
         categorySchema.post<CategoryDoc>('init',function(doc){
-            const image=doc.image;
-            doc.image=`${self.config.get<string>('root_url')}/category/${image}`;
+            if(doc.image){
+                const image=doc.image;
+                doc.image=`${self.config.get<string>('root_url')}/category/${image}`;
+            }
         });
         this.category=categorySchema;
     };

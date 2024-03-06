@@ -1,10 +1,10 @@
-import { HttpException, Inject, Injectable } from "@nestjs/common";
-import { name as orderName,OrderDoc } from "./order.entity";
-import { CartDoc,name as cartName } from "src/cart/cart.entity";
+import { HttpException, Injectable } from "@nestjs/common";
+import { OrderDoc } from "./order.entity";
+import { CartDoc } from "src/cart/cart.entity";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
-import { ProductDoc , name as prodName } from "src/product/product.entity";
-import { UserDoc, name as userName } from "src/user/user.entity";
+import { ProductDoc  } from "src/product/product.entity";
+import { UserDoc } from "src/user/user.entity";
 import { apiFactory } from "src/utils/api.factory";
 import { queryInterface } from "src/utils/api.features";
 import {Stripe} from "stripe";
